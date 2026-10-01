@@ -47,6 +47,15 @@ export function processImageUrl(originalUrl: string): string {
 }
 
 /**
+ * URL to try only after a direct image request fails.
+ */
+export function getImageProxyFallbackUrl(originalUrl: string): string {
+  const proxyUrl = getImageProxyUrl();
+  if (proxyUrl) return `${proxyUrl}${encodeURIComponent(originalUrl)}`;
+  return `/api/image-proxy?url=${encodeURIComponent(originalUrl)}`;
+}
+
+/**
  * 获取豆瓣代理 URL 设置
  */
 export function getDoubanProxyUrl(): string | null {

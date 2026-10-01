@@ -22,7 +22,10 @@ import {
   subscribeToDataUpdates,
 } from '@/lib/db.client';
 import { SearchResult } from '@/lib/types';
-import { getVideoResolutionFromM3u8, processImageUrl } from '@/lib/utils';
+import {
+  getImageProxyFallbackUrl,
+  getVideoResolutionFromM3u8,
+} from '@/lib/utils';
 
 import EpisodeSelector from '@/components/EpisodeSelector';
 import PageLayout from '@/components/PageLayout';
@@ -1931,9 +1934,16 @@ function PlayPageClient() {
                 {videoCover ? (
                   <>
                     <img
-                      src={processImageUrl(videoCover)}
+                      src={videoCover}
                       alt={videoTitle}
                       className='w-full h-full object-cover'
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.proxyAttempt) {
+                          target.dataset.proxyAttempt = 'true';
+                          target.src = getImageProxyFallbackUrl(videoCover);
+                        }
+                      }}
                     />
 
                     {/* 豆瓣链接按钮 */}
