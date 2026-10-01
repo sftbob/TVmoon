@@ -654,7 +654,7 @@ function PlayPageClient() {
 
     const initAll = async () => {
       if (!currentSource && !currentId && !videoTitle && !searchTitle) {
-        setError('缺少必要参数');
+        setError('缺少必要參數');
         setLoading(false);
         return;
       }
@@ -677,7 +677,7 @@ function PlayPageClient() {
         sourcesInfo = await fetchSourceDetail(currentSource, currentId);
       }
       if (sourcesInfo.length === 0) {
-        setError('未找到匹配结果');
+        setError('未找到匹配結果');
         setLoading(false);
         return;
       }
@@ -691,7 +691,7 @@ function PlayPageClient() {
         if (target) {
           detailData = target;
         } else {
-          setError('未找到匹配结果');
+          setError('未找到匹配結果');
           setLoading(false);
           return;
         }
@@ -703,7 +703,7 @@ function PlayPageClient() {
         optimizationEnabled
       ) {
         setLoadingStage('preferring');
-        setLoadingMessage('⚡ 正在优选最佳播放源...');
+        setLoadingMessage('⚡ 正在優選最佳播放源...');
 
         detailData = await preferBestSource(sourcesInfo);
       }
@@ -731,7 +731,7 @@ function PlayPageClient() {
       window.history.replaceState({}, '', newUrl.toString());
 
       setLoadingStage('ready');
-      setLoadingMessage('✨ 准备就绪，即将开始播放...');
+      setLoadingMessage('✨ 準備就緒，即將開始播放...');
 
       // 短暂延迟让用户看到完成状态
       setTimeout(() => {
@@ -837,7 +837,7 @@ function PlayPageClient() {
         (source) => source.source === newSource && source.id === newId
       );
       if (!newDetail) {
-        setError('未找到匹配结果');
+        setError('未找到匹配結果');
         return;
       }
 
@@ -1180,7 +1180,7 @@ function PlayPageClient() {
     }
 
     if (!videoUrl) {
-      setError('视频地址无效');
+      setError('影片地址無效');
       return;
     }
 
@@ -1562,7 +1562,7 @@ function PlayPageClient() {
       }
     } catch (err) {
       console.error('创建播放器失败:', err);
-      setError('播放器初始化失败');
+      setError('播放器初始化失敗');
     }
   }, [Artplayer, Hls, videoUrl, loading, blockAdEnabled]);
 
@@ -1697,7 +1697,7 @@ function PlayPageClient() {
             {/* 错误信息 */}
             <div className='space-y-4 mb-8'>
               <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-200'>
-                哎呀，出现了一些问题
+                哎呀，出現了一些問題
               </h2>
               <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4'>
                 <p className='text-red-600 dark:text-red-400 font-medium'>
@@ -1705,7 +1705,7 @@ function PlayPageClient() {
                 </p>
               </div>
               <p className='text-sm text-gray-500 dark:text-gray-400'>
-                请检查网络连接或尝试刷新页面
+                請檢查網路連接或嘗試刷新頁面
               </p>
             </div>
 
@@ -1719,14 +1719,14 @@ function PlayPageClient() {
                 }
                 className='w-full px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-medium hover:from-green-600 hover:to-emerald-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl'
               >
-                {videoTitle ? '🔍 返回搜索' : '← 返回上页'}
+                {videoTitle ? '🔍 返回搜尋' : '← 返回上頁'}
               </button>
 
               <button
                 onClick={() => window.location.reload()}
                 className='w-full px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200'
               >
-                🔄 重新尝试
+                🔄 重新嘗試
               </button>
             </div>
           </div>
@@ -1741,7 +1741,7 @@ function PlayPageClient() {
         {/* 第一行：影片标题 */}
         <div className='py-1'>
           <h1 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
-            {videoTitle || '影片标题'}
+            {videoTitle || '影片標題'}
             {totalEpisodes > 1 && (
               <span className='text-gray-500 dark:text-gray-400'>
                 {` > 第 ${currentEpisodeIndex + 1} 集`}
@@ -1759,7 +1759,7 @@ function PlayPageClient() {
               }
               className='group relative flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-200'
               title={
-                isEpisodeSelectorCollapsed ? '显示选集面板' : '隐藏选集面板'
+                isEpisodeSelectorCollapsed ? '顯示選集面板' : '隱藏選集面板'
               }
             >
               <svg
@@ -1778,7 +1778,7 @@ function PlayPageClient() {
                 />
               </svg>
               <span className='text-xs font-medium text-gray-600 dark:text-gray-300'>
-                {isEpisodeSelectorCollapsed ? '显示' : '隐藏'}
+                {isEpisodeSelectorCollapsed ? '顯示' : '隱藏'}
               </span>
 
               {/* 精致的状态指示点 */}
@@ -1841,8 +1841,8 @@ function PlayPageClient() {
                       <div className='space-y-2'>
                         <p className='text-xl font-semibold text-white animate-pulse'>
                           {videoLoadingStage === 'sourceChanging'
-                            ? '🔄 切换播放源...'
-                            : '🔄 视频加载中...'}
+                            ? '🔄 切換播放源...'
+                            : '🔄 影片加載中...'}
                         </p>
                       </div>
                     </div>
@@ -1883,7 +1883,7 @@ function PlayPageClient() {
             <div className='p-6 flex flex-col min-h-0'>
               {/* 标题 */}
               <h1 className='text-3xl font-bold mb-2 tracking-wide flex items-center flex-shrink-0 text-center md:text-left w-full'>
-                {videoTitle || '影片标题'}
+                {videoTitle || '影片標題'}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -1964,7 +1964,7 @@ function PlayPageClient() {
                   </>
                 ) : (
                   <span className='text-gray-600 dark:text-gray-400'>
-                    封面图片
+                    封面圖片
                   </span>
                 )}
               </div>

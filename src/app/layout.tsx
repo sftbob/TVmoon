@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: siteName,
-    description: '影视聚合',
+    description: '影視聚合',
     manifest: '/manifest.json',
   };
 }
@@ -89,7 +89,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang='zh-CN' suppressHydrationWarning>
+    <html lang='zh-Hant' suppressHydrationWarning>
       <head>
         <meta
           name='viewport'
