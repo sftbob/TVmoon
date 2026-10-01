@@ -69,6 +69,13 @@ const withPWA = require('next-pwa')({
   disable: process.env.NODE_ENV === 'development',
   register: true,
   skipWaiting: true,
+  cacheStartUrl: false,
+  dynamicStartUrl: false,
+  runtimeCaching: [
+    { urlPattern: ({ url }) => url.pathname.startsWith('/api/'), handler: 'NetworkOnly' },
+    { urlPattern: ({ request }) => request.mode === 'navigate', handler: 'NetworkOnly' },
+    ...require('next-pwa/cache'),
+  ],
 });
 
 module.exports = withPWA(nextConfig);

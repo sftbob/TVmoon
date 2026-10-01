@@ -9,6 +9,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import { getConfig } from '@/lib/config';
 import RuntimeConfig from '@/lib/runtime';
 
+import { PwaInstallProvider } from '@/components/PwaInstallButton';
+
 import { GlobalErrorIndicator } from '../components/GlobalErrorIndicator';
 import { SiteProvider } from '../components/SiteProvider';
 import { ThemeProvider } from '../components/ThemeProvider';
@@ -30,6 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: siteName,
     description: '影視聚合',
     manifest: '/manifest.json',
+    appleWebApp: { capable: true, title: siteName, statusBarStyle: 'black-translucent' },
   };
 }
 
@@ -114,7 +117,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <SiteProvider siteName={siteName} announcement={announcement}>
-            {children}
+            <PwaInstallProvider>{children}</PwaInstallProvider>
             <GlobalErrorIndicator />
           </SiteProvider>
         </ThemeProvider>
