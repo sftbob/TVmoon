@@ -37,13 +37,26 @@ export function processImageUrl(originalUrl: string): string {
 
   const proxyUrl = getImageProxyUrl();
   if (!proxyUrl) {
-    if (typeof window !== 'undefined' && window.location.protocol === 'https:' && originalUrl.startsWith('http://')) {
+    if (
+      typeof window !== 'undefined' &&
+      window.location.protocol === 'https:' &&
+      originalUrl.startsWith('http://')
+    ) {
       return `/api/image-proxy?url=${encodeURIComponent(originalUrl)}`;
     }
     return originalUrl;
   }
 
   return `${proxyUrl}${encodeURIComponent(originalUrl)}`;
+}
+
+/**
+ * URL to try only after a direct image request fails.
+ */
+export function getImageProxyFallbackUrl(originalUrl: string): string {
+  const proxyUrl = getImageProxyUrl();
+  if (proxyUrl) return `${proxyUrl}${encodeURIComponent(originalUrl)}`;
+  return `/api/image-proxy?url=${encodeURIComponent(originalUrl)}`;
 }
 
 /**
