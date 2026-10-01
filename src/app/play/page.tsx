@@ -1294,7 +1294,7 @@ function PlayPageClient() {
             ensureVideoSource(video, url);
 
             hls.on(Hls.Events.ERROR, function (event: any, data: any) {
-              console.error('HLS Error:', event, data);
+              console.error('播放串流發生錯誤');
               if (data.fatal) {
                 switch (data.type) {
                   case Hls.ErrorTypes.NETWORK_ERROR:
@@ -1523,8 +1523,8 @@ function PlayPageClient() {
         }
       });
 
-      artPlayerRef.current.on('error', (err: any) => {
-        console.error('播放器错误:', err);
+      artPlayerRef.current.on('error', () => {
+        console.error('播放器發生錯誤');
         if (artPlayerRef.current.currentTime > 0) {
           return;
         }
@@ -1567,7 +1567,7 @@ function PlayPageClient() {
         );
       }
     } catch (err) {
-      console.error('创建播放器失败:', err);
+      console.error('建立播放器失敗');
       setError('播放器初始化失敗');
     }
   }, [Artplayer, Hls, videoUrl, loading, blockAdEnabled]);

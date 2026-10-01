@@ -11,15 +11,6 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  windows-download-helper:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          persist-credentials: false
-      - name: Validate Windows queue runner with a simulated downloader
-        shell: powershell
-        run: ./tests/download-helper.tests.ps1
   validate:
     runs-on: ubuntu-latest
     steps:

@@ -19,7 +19,7 @@ export default function VideoTransfer({ url, detail }: { url: string; detail?: S
     setManualCopy(false);
   }, [url]);
 
-  if (!info) return null;
+  if (!info) return detail ? <DownloadQueue detail={detail} /> : null;
 
   const copyUrl = async () => {
     try {
