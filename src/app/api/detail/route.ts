@@ -9,7 +9,6 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
   const sourceCode = searchParams.get('source');
-  const handoff = searchParams.get('handoff') === '1';
 
   if (!id || !sourceCode) {
     return NextResponse.json({ error: '缺少必要参数' }, { status: 400 });
@@ -27,10 +26,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: '无效的API来源' }, { status: 400 });
     }
 
-    const result = await getDetailFromApi(apiSite, id, handoff);
-    if (handoff) {
-      return NextResponse.json(result, { headers: { 'Cache-Control': 'private, no-store', 'CDN-Cache-Control': 'no-store', 'Vercel-CDN-Cache-Control': 'no-store' } });
-    }
+    const result = await getDetailFromApi(apiSite, id);
     const cacheTime = await getCacheTime();
 
     return NextResponse.json(result, {
@@ -42,7 +38,7 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: handoff ? '無法取得播放來源' : (error as Error).message },
+      { error: (error as Error).message },
       { status: 500 }
     );
   }

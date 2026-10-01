@@ -192,11 +192,10 @@ const M3U8_PATTERN = /(https?:\/\/[^"'\s<>#$]+?\.m3u8(?:\?[^"'\s<>#$]*)?)/g;
 
 export async function getDetailFromApi(
   apiSite: ApiSite,
-  id: string,
-  fresh = false
+  id: string
 ): Promise<SearchResult> {
   if (apiSite.detail) {
-    return handleSpecialSourceDetail(id, apiSite, fresh);
+    return handleSpecialSourceDetail(id, apiSite);
   }
 
   const detailUrl = `${apiSite.api}${API_CONFIG.detail.path}${id}`;
@@ -207,7 +206,6 @@ export async function getDetailFromApi(
   const response = await fetch(detailUrl, {
     headers: API_CONFIG.detail.headers,
     signal: controller.signal,
-    ...(fresh ? { cache: 'no-store' as const } : {}),
   });
 
   clearTimeout(timeoutId);
@@ -273,8 +271,7 @@ export async function getDetailFromApi(
 
 async function handleSpecialSourceDetail(
   id: string,
-  apiSite: ApiSite,
-  fresh = false
+  apiSite: ApiSite
 ): Promise<SearchResult> {
   const detailUrl = `${apiSite.detail}/index.php/vod/detail/id/${id}.html`;
 
@@ -284,7 +281,6 @@ async function handleSpecialSourceDetail(
   const response = await fetch(detailUrl, {
     headers: API_CONFIG.detail.headers,
     signal: controller.signal,
-    ...(fresh ? { cache: 'no-store' as const } : {}),
   });
 
   clearTimeout(timeoutId);

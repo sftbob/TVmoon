@@ -31,7 +31,6 @@ import {
 
 import EpisodeSelector from '@/components/EpisodeSelector';
 import PageLayout from '@/components/PageLayout';
-import VideoTransfer from '@/components/VideoTransfer';
 
 // 扩展 HTMLVideoElement 类型以支持 hls 属性
 declare global {
@@ -1754,7 +1753,6 @@ function PlayPageClient() {
               </span>
             )}
           </h1>
-          <VideoTransfer url={videoUrl} detail={detail} />
         </div>
         {/* 第二行：播放器和选集 */}
         <div className='space-y-2'>
