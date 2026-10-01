@@ -1,0 +1,2 @@
+# Keep the supplied bridge helper byte-for-byte across Windows/Linux checkouts.
+src/lib/tvmoon-handoff.js -text

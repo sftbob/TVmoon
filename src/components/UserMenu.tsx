@@ -10,6 +10,8 @@ import { createPortal } from 'react-dom';
 import { getAuthInfoFromBrowserCookie } from '@/lib/auth';
 import { checkForUpdates, CURRENT_VERSION, UpdateStatus } from '@/lib/version';
 
+import PwaInstallButton from '@/components/PwaInstallButton';
+
 interface AuthInfo {
   username?: string;
   role?: 'owner' | 'admin' | 'user';
@@ -354,6 +356,7 @@ export const UserMenu: React.FC = () => {
 
         {/* 菜单项 */}
         <div className='py-1'>
+          <PwaInstallButton />
           {/* 设置按钮 */}
           <button
             onClick={handleSettings}

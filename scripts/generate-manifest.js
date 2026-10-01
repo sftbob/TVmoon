@@ -17,11 +17,13 @@ const siteName = process.env.SITE_NAME || 'MoonTV';
 const manifestTemplate = {
   "name": siteName,
   "short_name": siteName,
-  "description": "影视聚合",
+  "description": "影視搜尋與播放",
+  "id": "/",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#000000",
+  "theme_color": "#22c55e",
   "apple-mobile-web-app-capable": "yes",
   "apple-mobile-web-app-status-bar-style": "black",
   "icons": [
