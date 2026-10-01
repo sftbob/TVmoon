@@ -385,7 +385,7 @@ function DoubanPageClient() {
               {getPageTitle()}
             </h1>
             <p className='text-sm sm:text-base text-gray-600 dark:text-gray-400'>
-              来自豆瓣的精选内容
+              來自豆瓣的精選內容
             </p>
           </div>
 
@@ -451,7 +451,7 @@ function DoubanPageClient() {
               {isLoadingMore && (
                 <div className='flex items-center gap-2'>
                   <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-green-500'></div>
-                  <span className='text-gray-600'>加载中...</span>
+                  <span className='text-gray-600'>加載中...</span>
                 </div>
               )}
             </div>
@@ -459,12 +459,12 @@ function DoubanPageClient() {
 
           {/* 没有更多数据提示 */}
           {!hasMore && doubanData.length > 0 && (
-            <div className='text-center text-gray-500 py-8'>已加载全部内容</div>
+            <div className='text-center text-gray-500 py-8'>已加載全部內容</div>
           )}
 
           {/* 空状态 */}
           {!loading && doubanData.length === 0 && (
-            <div className='text-center text-gray-500 py-8'>暂无相关内容</div>
+            <div className='text-center text-gray-500 py-8'>暫無相關內容</div>
           )}
         </div>
       </div>

@@ -32,5 +32,7 @@ jobs:
         run: pnpm lint
       - name: Type check
         run: pnpm typecheck
+      - name: Security regression tests
+        run: pnpm test --runInBand
       - name: Build
         run: pnpm build
