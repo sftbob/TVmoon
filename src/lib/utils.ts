@@ -55,6 +55,43 @@ export function getImageProxyFallbackUrl(originalUrl: string): string {
   return `/api/image-proxy?url=${encodeURIComponent(originalUrl)}`;
 }
 
+const POSTER_PROXY_HOSTS_KEY = 'posterProxyHosts';
+const POSTER_PROXY_TTL = 15 * 60 * 1000;
+
+function getPosterProxyHosts(): Record<string, number> {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem(POSTER_PROXY_HOSTS_KEY) || '{}');
+    return Object.fromEntries(Object.entries(stored).filter(([, expiry]) =>
+      typeof expiry === 'number' && expiry > Date.now()
+    )) as Record<string, number>;
+  } catch {
+    return {};
+  }
+}
+
+export function getInitialPosterUrl(originalUrl: string): string {
+  if (typeof window === 'undefined' || !originalUrl) return originalUrl;
+  try {
+    const url = new URL(originalUrl);
+    if ((window.location.protocol === 'https:' && url.protocol === 'http:') ||
+        getPosterProxyHosts()[url.hostname]) {
+      return getImageProxyFallbackUrl(originalUrl);
+    }
+  } catch { /* Relative image URLs can load directly. */ }
+  return originalUrl;
+}
+
+// Remember a blocked host only after its proxy successfully loads an image.
+export function rememberPosterProxyHost(originalUrl: string): void {
+  try {
+    const hostname = new URL(originalUrl).hostname;
+    sessionStorage.setItem(POSTER_PROXY_HOSTS_KEY, JSON.stringify({
+      ...getPosterProxyHosts(),
+      [hostname]: Date.now() + POSTER_PROXY_TTL,
+    }));
+  } catch { /* Images still work when browser storage is unavailable. */ }
+}
+
 /**
  * 获取豆瓣代理 URL 设置
  */

@@ -12,7 +12,9 @@ import React, {
 import { SearchResult } from '@/lib/types';
 import {
   getImageProxyFallbackUrl,
+  getInitialPosterUrl,
   getVideoResolutionFromM3u8,
+  rememberPosterProxyHost,
 } from '@/lib/utils';
 
 // 定义视频信息类型
@@ -495,9 +497,18 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                         <div className='flex-shrink-0 w-12 h-20 bg-gray-300 dark:bg-gray-600 rounded overflow-hidden'>
                           {source.episodes && source.episodes.length > 0 && (
                             <img
-                              src={source.poster}
+                              key={source.poster}
+                              src={getInitialPosterUrl(source.poster)}
                               alt={source.title}
                               className='w-full h-full object-cover'
+                              loading='lazy'
+                              referrerPolicy='no-referrer'
+                              onLoad={(e) => {
+                                if (e.currentTarget.dataset.proxyAttempt ||
+                                    getInitialPosterUrl(source.poster) !== source.poster) {
+                                  rememberPosterProxyHost(source.poster);
+                                }
+                              }}
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement;
                                 if (!target.dataset.proxyAttempt) {

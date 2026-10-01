@@ -24,7 +24,9 @@ import {
 import { SearchResult } from '@/lib/types';
 import {
   getImageProxyFallbackUrl,
+  getInitialPosterUrl,
   getVideoResolutionFromM3u8,
+  rememberPosterProxyHost,
 } from '@/lib/utils';
 
 import EpisodeSelector from '@/components/EpisodeSelector';
@@ -1934,9 +1936,18 @@ function PlayPageClient() {
                 {videoCover ? (
                   <>
                     <img
-                      src={videoCover}
+                      key={videoCover}
+                      src={getInitialPosterUrl(videoCover)}
                       alt={videoTitle}
                       className='w-full h-full object-cover'
+                      loading='lazy'
+                      referrerPolicy='no-referrer'
+                      onLoad={(e) => {
+                        if (e.currentTarget.dataset.proxyAttempt ||
+                            getInitialPosterUrl(videoCover) !== videoCover) {
+                          rememberPosterProxyHost(videoCover);
+                        }
+                      }}
                       onError={(e) => {
                         const target = e.currentTarget;
                         if (!target.dataset.proxyAttempt) {
