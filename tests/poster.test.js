@@ -83,6 +83,10 @@ test('host hint expires and respects the currently selected proxy', () => {
     'posterProxyHosts',
     JSON.stringify({ 'posters.example': Date.now() - 1 })
   );
+  expect(getInitialPosterUrl(first)).toBe(
+    `/custom-proxy?url=${encodeURIComponent(first)}`
+  );
+  localStorage.setItem('enableImageProxy', 'false');
   expect(getInitialPosterUrl(first)).toBe(first);
 });
 
