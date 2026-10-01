@@ -22,7 +22,12 @@ import {
   subscribeToDataUpdates,
 } from '@/lib/db.client';
 import { SearchResult } from '@/lib/types';
-import { getVideoResolutionFromM3u8, processImageUrl } from '@/lib/utils';
+import {
+  getImageProxyFallbackUrl,
+  getInitialPosterUrl,
+  getVideoResolutionFromM3u8,
+  rememberPosterProxyHost,
+} from '@/lib/utils';
 
 import EpisodeSelector from '@/components/EpisodeSelector';
 import PageLayout from '@/components/PageLayout';
@@ -1931,9 +1936,25 @@ function PlayPageClient() {
                 {videoCover ? (
                   <>
                     <img
-                      src={processImageUrl(videoCover)}
+                      key={videoCover}
+                      src={getInitialPosterUrl(videoCover)}
                       alt={videoTitle}
                       className='w-full h-full object-cover'
+                      loading='lazy'
+                      referrerPolicy='no-referrer'
+                      onLoad={(e) => {
+                        if (e.currentTarget.dataset.proxyAttempt ||
+                            getInitialPosterUrl(videoCover) !== videoCover) {
+                          rememberPosterProxyHost(videoCover);
+                        }
+                      }}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.proxyAttempt) {
+                          target.dataset.proxyAttempt = 'true';
+                          target.src = getImageProxyFallbackUrl(videoCover);
+                        }
+                      }}
                     />
 
                     {/* 豆瓣链接按钮 */}

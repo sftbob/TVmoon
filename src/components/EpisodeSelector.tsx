@@ -10,7 +10,12 @@ import React, {
 } from 'react';
 
 import { SearchResult } from '@/lib/types';
-import { getVideoResolutionFromM3u8, processImageUrl } from '@/lib/utils';
+import {
+  getImageProxyFallbackUrl,
+  getInitialPosterUrl,
+  getVideoResolutionFromM3u8,
+  rememberPosterProxyHost,
+} from '@/lib/utils';
 
 // 定义视频信息类型
 interface VideoInfo {
@@ -492,12 +497,26 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                         <div className='flex-shrink-0 w-12 h-20 bg-gray-300 dark:bg-gray-600 rounded overflow-hidden'>
                           {source.episodes && source.episodes.length > 0 && (
                             <img
-                              src={processImageUrl(source.poster)}
+                              key={source.poster}
+                              src={getInitialPosterUrl(source.poster)}
                               alt={source.title}
                               className='w-full h-full object-cover'
+                              loading='lazy'
+                              referrerPolicy='no-referrer'
+                              onLoad={(e) => {
+                                if (e.currentTarget.dataset.proxyAttempt ||
+                                    getInitialPosterUrl(source.poster) !== source.poster) {
+                                  rememberPosterProxyHost(source.poster);
+                                }
+                              }}
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement;
-                                target.style.display = 'none';
+                                if (!target.dataset.proxyAttempt) {
+                                  target.dataset.proxyAttempt = 'true';
+                                  target.src = getImageProxyFallbackUrl(source.poster);
+                                } else {
+                                  target.style.display = 'none';
+                                }
                               }}
                             />
                           )}

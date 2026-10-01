@@ -14,7 +14,11 @@ import {
   subscribeToDataUpdates,
 } from '@/lib/db.client';
 import { SearchResult } from '@/lib/types';
-import { processImageUrl } from '@/lib/utils';
+import {
+  getImageProxyFallbackUrl,
+  getInitialPosterUrl,
+  rememberPosterProxyHost,
+} from '@/lib/utils';
 
 import { ImagePlaceholder } from '@/components/ImagePlaceholder';
 
@@ -58,6 +62,7 @@ export default function VideoCard({
   const router = useRouter();
   const [favorited, setFavorited] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [failedPoster, setFailedPoster] = useState<string | null>(null);
 
   const isAggregate = from === 'search' && !!items?.length;
 
@@ -96,6 +101,13 @@ export default function VideoCard({
 
   const actualTitle = aggregateData?.first.title ?? title;
   const actualPoster = aggregateData?.first.poster ?? poster;
+  const posterUrl = failedPoster === actualPoster
+    ? getImageProxyFallbackUrl(actualPoster)
+    : getInitialPosterUrl(actualPoster);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [actualPoster]);
   const actualSource = aggregateData?.first.source ?? source;
   const actualId = aggregateData?.first.id ?? id;
   const actualDoubanId = aggregateData?.mostFrequentDoubanId ?? douban_id;
@@ -274,12 +286,20 @@ export default function VideoCard({
         {!isLoading && <ImagePlaceholder aspectRatio='aspect-[2/3]' />}
         {/* 图片 */}
         <Image
-          src={processImageUrl(actualPoster)}
+          src={posterUrl}
           alt={actualTitle}
           fill
           className='object-cover'
           referrerPolicy='no-referrer'
-          onLoadingComplete={() => setIsLoading(true)}
+          onLoadingComplete={() => {
+            if (posterUrl !== actualPoster) rememberPosterProxyHost(actualPoster);
+            setIsLoading(true);
+          }}
+          onError={() => {
+            const fallbackUrl = getImageProxyFallbackUrl(actualPoster);
+            if (posterUrl !== fallbackUrl) setFailedPoster(actualPoster);
+            else setIsLoading(true);
+          }}
         />
 
         {/* 悬浮遮罩 */}
