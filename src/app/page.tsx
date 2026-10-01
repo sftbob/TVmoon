@@ -265,6 +265,7 @@ function HomeClient() {
                         >
                           <VideoCard
                             from="douban"
+                            priority={index < 2}
                             title={movie.title}
                             poster={movie.poster}
                             douban_id={Number(movie.id)}
