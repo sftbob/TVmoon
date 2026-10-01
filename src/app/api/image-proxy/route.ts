@@ -12,6 +12,15 @@ export async function GET(request: Request) {
   }
 
   try {
+    const url = new URL(imageUrl);
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      return NextResponse.json({ error: 'Invalid image URL' }, { status: 400 });
+    }
+  } catch {
+    return NextResponse.json({ error: 'Invalid image URL' }, { status: 400 });
+  }
+
+  try {
     const imageResponse = await fetch(imageUrl, {
       headers: {
         Referer: 'https://movie.douban.com/',
@@ -28,6 +37,9 @@ export async function GET(request: Request) {
     }
 
     const contentType = imageResponse.headers.get('content-type');
+    if (!contentType?.toLowerCase().startsWith('image/')) {
+      return NextResponse.json({ error: 'Response is not an image' }, { status: 400 });
+    }
 
     if (!imageResponse.body) {
       return NextResponse.json(
@@ -38,6 +50,8 @@ export async function GET(request: Request) {
 
     // 创建响应头
     const headers = new Headers();
+    headers.set('X-Content-Type-Options', 'nosniff');
+    headers.set('Content-Security-Policy', "default-src 'none'; sandbox");
     if (contentType) {
       headers.set('Content-Type', contentType);
     }
