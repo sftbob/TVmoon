@@ -3,9 +3,12 @@
 import { Copy, Download } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { SearchResult } from '@/lib/types';
 import { getVideoTransferInfo } from '@/lib/video-transfer';
 
-export default function VideoTransfer({ url }: { url: string }) {
+import DownloadQueue from './DownloadQueue';
+
+export default function VideoTransfer({ url, detail }: { url: string; detail?: SearchResult | null }) {
   const info = getVideoTransferInfo(url);
   const [copied, setCopied] = useState(false);
   const [manualCopy, setManualCopy] = useState(false);
@@ -81,6 +84,7 @@ export default function VideoTransfer({ url }: { url: string }) {
           />
         </div>
       )}
+      {detail && <DownloadQueue detail={detail} />}
     </section>
   );
 }

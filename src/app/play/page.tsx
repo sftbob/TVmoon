@@ -1754,7 +1754,7 @@ function PlayPageClient() {
               </span>
             )}
           </h1>
-          <VideoTransfer url={videoUrl} />
+          <VideoTransfer url={videoUrl} detail={detail} />
         </div>
         {/* 第二行：播放器和选集 */}
         <div className='space-y-2'>
