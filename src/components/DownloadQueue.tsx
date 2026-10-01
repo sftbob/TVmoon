@@ -216,6 +216,7 @@ export default function DownloadQueue({ detail }: { detail: SearchResult }) {
       const incoming = metadataFromDetail(detail, episodes);
       const next = mergeQueueMetadata(items, incoming);
       setItems(next);
+      setRefresh((n) => n + 1);
       changeSelection(
         Array.from(new Set([...checked, ...incoming.map((item) => item.id)]))
       );

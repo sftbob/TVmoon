@@ -27,7 +27,7 @@
 | 用途 | 完整 origin | 證據／狀態 |
 |---|---|---|
 | 正式站 | `https://tv-moon-lime.vercel.app` | 使用者於本次交接提供；本次不更新正式站 |
-| 指定預覽 | 待本 PR 的 Vercel 部署確認後填入 | 不沿用 PR #6 的舊預覽 origin |
+| 指定預覽 | `https://tv-moon-git-feature-tianding-handoff-v1-sftbobs-projects.vercel.app` | PR #7 的 Vercel bot 部署資訊確認；部署狀態以 PR 檢查為準 |
 
 不含路徑、尾斜線、帳密或萬用字元。不同 hostname／www／port 須分別核准，禁止 `*.vercel.app`。網站只提示授權，不能替使用者修改核准清單。
 
