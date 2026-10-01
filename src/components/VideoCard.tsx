@@ -3,7 +3,13 @@
 import { CheckCircle, Heart, Link, PlayCircleIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   deleteFavorite,
@@ -17,6 +23,7 @@ import { SearchResult } from '@/lib/types';
 import {
   getImageProxyFallbackUrl,
   getInitialPosterUrl,
+  POSTER_PROXY_EVENT,
   rememberPosterProxyHost,
 } from '@/lib/utils';
 
@@ -39,6 +46,7 @@ interface VideoCardProps {
   rate?: string;
   items?: SearchResult[];
   type?: string;
+  priority?: boolean;
 }
 
 export default function VideoCard({
@@ -58,8 +66,11 @@ export default function VideoCard({
   rate,
   items,
   type = '',
+  priority = false,
 }: VideoCardProps) {
   const router = useRouter();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [favorited, setFavorited] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [failedPoster, setFailedPoster] = useState<string | null>(null);
@@ -101,13 +112,55 @@ export default function VideoCard({
 
   const actualTitle = aggregateData?.first.title ?? title;
   const actualPoster = aggregateData?.first.poster ?? poster;
-  const posterUrl = failedPoster === actualPoster
-    ? getImageProxyFallbackUrl(actualPoster)
-    : getInitialPosterUrl(actualPoster);
+  const posterUrl =
+    failedPoster === actualPoster
+      ? getImageProxyFallbackUrl(actualPoster)
+      : getInitialPosterUrl(actualPoster);
 
   useEffect(() => {
     setIsLoading(false);
   }, [actualPoster]);
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setIsVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsVisible(entry.isIntersecting);
+    });
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, []);
+
+  // Start the fallback clock only while this poster is visible and still loading.
+  useEffect(() => {
+    if (!isVisible || isLoading || !actualPoster || posterUrl !== actualPoster)
+      return;
+    const timer = window.setTimeout(() => setFailedPoster(actualPoster), 8000);
+    return () => window.clearTimeout(timer);
+  }, [actualPoster, posterUrl, isVisible, isLoading]);
+
+  // A successful fallback on one card also unblocks pending sibling posters.
+  useEffect(() => {
+    const onProxyReady = (event: Event) => {
+      if (isLoading || !actualPoster) return;
+      try {
+        if (
+          new URL(actualPoster).hostname ===
+          (event as CustomEvent<string>).detail
+        ) {
+          setFailedPoster(actualPoster);
+        }
+      } catch {
+        /* Relative posters keep their existing loading behavior. */
+      }
+    };
+    window.addEventListener(POSTER_PROXY_EVENT, onProxyReady);
+    return () => window.removeEventListener(POSTER_PROXY_EVENT, onProxyReady);
+  }, [actualPoster, isLoading]);
+
   const actualSource = aggregateData?.first.source ?? source;
   const actualId = aggregateData?.first.id ?? id;
   const actualDoubanId = aggregateData?.mostFrequentDoubanId ?? douban_id;
@@ -277,6 +330,7 @@ export default function VideoCard({
 
   return (
     <div
+      ref={cardRef}
       className='group relative w-full rounded-lg bg-transparent cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.05] hover:z-[500]'
       onClick={handleClick}
     >
@@ -289,10 +343,12 @@ export default function VideoCard({
           src={posterUrl}
           alt={actualTitle}
           fill
+          priority={priority}
           className='object-cover'
           referrerPolicy='no-referrer'
           onLoadingComplete={() => {
-            if (posterUrl !== actualPoster) rememberPosterProxyHost(actualPoster);
+            if (posterUrl !== actualPoster)
+              rememberPosterProxyHost(actualPoster);
             setIsLoading(true);
           }}
           onError={() => {

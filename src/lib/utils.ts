@@ -37,7 +37,11 @@ export function processImageUrl(originalUrl: string): string {
 
   const proxyUrl = getImageProxyUrl();
   if (!proxyUrl) {
-    if (typeof window !== 'undefined' && window.location.protocol === 'https:' && originalUrl.startsWith('http://')) {
+    if (
+      typeof window !== 'undefined' &&
+      window.location.protocol === 'https:' &&
+      originalUrl.startsWith('http://')
+    ) {
       return `/api/image-proxy?url=${encodeURIComponent(originalUrl)}`;
     }
     return originalUrl;
@@ -55,15 +59,20 @@ export function getImageProxyFallbackUrl(originalUrl: string): string {
   return `/api/image-proxy?url=${encodeURIComponent(originalUrl)}`;
 }
 
+export const POSTER_PROXY_EVENT = 'tvmoon:poster-proxy-ready';
 const POSTER_PROXY_HOSTS_KEY = 'posterProxyHosts';
 const POSTER_PROXY_TTL = 15 * 60 * 1000;
 
 function getPosterProxyHosts(): Record<string, number> {
   try {
-    const stored = JSON.parse(sessionStorage.getItem(POSTER_PROXY_HOSTS_KEY) || '{}');
-    return Object.fromEntries(Object.entries(stored).filter(([, expiry]) =>
-      typeof expiry === 'number' && expiry > Date.now()
-    )) as Record<string, number>;
+    const stored = JSON.parse(
+      sessionStorage.getItem(POSTER_PROXY_HOSTS_KEY) || '{}'
+    );
+    return Object.fromEntries(
+      Object.entries(stored).filter(
+        ([, expiry]) => typeof expiry === 'number' && expiry > Date.now()
+      )
+    ) as Record<string, number>;
   } catch {
     return {};
   }
@@ -73,11 +82,19 @@ export function getInitialPosterUrl(originalUrl: string): string {
   if (typeof window === 'undefined' || !originalUrl) return originalUrl;
   try {
     const url = new URL(originalUrl);
-    if ((window.location.protocol === 'https:' && url.protocol === 'http:') ||
-        getPosterProxyHosts()[url.hostname]) {
+    const proxy = getImageProxyUrl();
+    if (
+      proxy ||
+      localStorage.getItem('enableImageProxy') === 'true' ||
+      /(^|\.)doubanio\.com$/i.test(url.hostname) ||
+      (window.location.protocol === 'https:' && url.protocol === 'http:') ||
+      getPosterProxyHosts()[url.hostname]
+    ) {
       return getImageProxyFallbackUrl(originalUrl);
     }
-  } catch { /* Relative image URLs can load directly. */ }
+  } catch {
+    /* Relative image URLs can load directly. */
+  }
   return originalUrl;
 }
 
@@ -85,11 +102,21 @@ export function getInitialPosterUrl(originalUrl: string): string {
 export function rememberPosterProxyHost(originalUrl: string): void {
   try {
     const hostname = new URL(originalUrl).hostname;
-    sessionStorage.setItem(POSTER_PROXY_HOSTS_KEY, JSON.stringify({
-      ...getPosterProxyHosts(),
-      [hostname]: Date.now() + POSTER_PROXY_TTL,
-    }));
-  } catch { /* Images still work when browser storage is unavailable. */ }
+    const hosts = getPosterProxyHosts();
+    sessionStorage.setItem(
+      POSTER_PROXY_HOSTS_KEY,
+      JSON.stringify({
+        ...hosts,
+        [hostname]: Date.now() + POSTER_PROXY_TTL,
+      })
+    );
+    if (!hosts[hostname])
+      window.dispatchEvent(
+        new CustomEvent(POSTER_PROXY_EVENT, { detail: hostname })
+      );
+  } catch {
+    /* Images still work when browser storage is unavailable. */
+  }
 }
 
 /**
