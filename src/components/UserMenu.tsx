@@ -442,7 +442,12 @@ export const UserMenu: React.FC = () => {
       />
 
       {/* 设置面板 */}
-      <div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-xl z-[1001] p-6'>
+      <div
+        role='dialog'
+        aria-modal='true'
+        aria-label='本地設定'
+        className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%_-_2rem)] max-w-md max-h-[85dvh] overflow-y-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl z-[1001] p-6'
+      >
         {/* 标题栏 */}
         <div className='flex items-center justify-between mb-6'>
           <div className='flex items-center gap-3'>
@@ -577,7 +582,7 @@ export const UserMenu: React.FC = () => {
                 啟用圖片代理
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                啟用后，所有圖片加載將通過代理伺服器
+                所有海報優先走代理；豆瓣海報預設自動使用內建代理
               </p>
             </div>
             <label className='flex items-center cursor-pointer'>
@@ -585,6 +590,7 @@ export const UserMenu: React.FC = () => {
                 <input
                   type='checkbox'
                   className='sr-only peer'
+                  aria-label='啟用圖片代理'
                   checked={enableImageProxy}
                   onChange={(e) => handleImageProxyToggle(e.target.checked)}
                 />
@@ -601,7 +607,7 @@ export const UserMenu: React.FC = () => {
                 圖片代理地址
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                僅在啟用圖片代理時生效
+                留空使用內建代理，不需要另外尋找代理網址
               </p>
             </div>
             <input
@@ -612,6 +618,7 @@ export const UserMenu: React.FC = () => {
                   : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 text-gray-400 dark:text-gray-500 placeholder-gray-400 dark:placeholder-gray-600 cursor-not-allowed'
               }`}
               placeholder='例如: https://imageproxy.example.com/?url='
+              aria-label='圖片代理地址'
               value={imageProxyUrl}
               onChange={(e) => handleImageProxyUrlChange(e.target.value)}
               disabled={!enableImageProxy}
@@ -622,7 +629,7 @@ export const UserMenu: React.FC = () => {
         {/* 底部说明 */}
         <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700'>
           <p className='text-xs text-gray-500 dark:text-gray-400 text-center'>
-            這些設定保存在本地瀏覽器中
+            設定自動保存在此瀏覽器，變更後請重新整理頁面
           </p>
         </div>
       </div>

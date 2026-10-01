@@ -82,7 +82,11 @@ export function getInitialPosterUrl(originalUrl: string): string {
   if (typeof window === 'undefined' || !originalUrl) return originalUrl;
   try {
     const url = new URL(originalUrl);
+    const proxy = getImageProxyUrl();
     if (
+      proxy ||
+      localStorage.getItem('enableImageProxy') === 'true' ||
+      /(^|\.)doubanio\.com$/i.test(url.hostname) ||
       (window.location.protocol === 'https:' && url.protocol === 'http:') ||
       getPosterProxyHosts()[url.hostname]
     ) {

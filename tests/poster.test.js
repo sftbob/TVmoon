@@ -22,7 +22,7 @@ jest.mock('@/lib/db.client', () => ({
 }));
 const VideoCard = require('@/components/VideoCard').default;
 const { getInitialPosterUrl, rememberPosterProxyHost } = require('@/lib/utils');
-const first = 'https://img3.doubanio.com/first.jpg';
+const first = 'https://posters.example/first.jpg';
 const second = 'https://another.example/second.jpg';
 const proxy = (url) => `/api/image-proxy?url=${encodeURIComponent(url)}`;
 beforeEach(() => {
@@ -53,8 +53,8 @@ test('failed direct image retries once with proxy and remembers only success', (
   fireEvent.error(image);
   expect(image.getAttribute('src')).toBe(proxy(first));
   fireEvent.load(image);
-  expect(getInitialPosterUrl('https://img3.doubanio.com/next.jpg')).toBe(
-    proxy('https://img3.doubanio.com/next.jpg')
+  expect(getInitialPosterUrl('https://posters.example/next.jpg')).toBe(
+    proxy('https://posters.example/next.jpg')
   );
 });
 
@@ -81,7 +81,7 @@ test('host hint expires and respects the currently selected proxy', () => {
   );
   sessionStorage.setItem(
     'posterProxyHosts',
-    JSON.stringify({ 'img3.doubanio.com': Date.now() - 1 })
+    JSON.stringify({ 'posters.example': Date.now() - 1 })
   );
   expect(getInitialPosterUrl(first)).toBe(first);
 });
@@ -129,12 +129,12 @@ test('successful proxy unblocks pending siblings without replacing loaded images
       <VideoCard
         from='douban'
         title='Pending'
-        poster='https://img3.doubanio.com/pending.jpg'
+        poster='https://posters.example/pending.jpg'
       />
       <VideoCard
         from='douban'
         title='Loaded'
-        poster='https://img3.doubanio.com/loaded.jpg'
+        poster='https://posters.example/loaded.jpg'
       />
       <VideoCard from='douban' title='Other' poster={second} />
     </>
@@ -146,10 +146,30 @@ test('successful proxy unblocks pending siblings without replacing loaded images
   );
   fireEvent.load(screen.getByAltText('Trigger'));
   expect(screen.getByAltText('Pending').getAttribute('src')).toBe(
-    proxy('https://img3.doubanio.com/pending.jpg')
+    proxy('https://posters.example/pending.jpg')
   );
   expect(screen.getByAltText('Loaded').getAttribute('src')).toBe(
-    'https://img3.doubanio.com/loaded.jpg'
+    'https://posters.example/loaded.jpg'
   );
   expect(screen.getByAltText('Other').getAttribute('src')).toBe(second);
+});
+
+test('Douban CDN posters use the built-in proxy immediately without an eight-second direct attempt', () => {
+  const url = 'https://img3.doubanio.com/poster.jpg';
+  expect(getInitialPosterUrl(url)).toBe(proxy(url));
+  expect(
+    getInitialPosterUrl('https://img3.doubanio.com.attacker.example/poster.jpg')
+  ).toBe('https://img3.doubanio.com.attacker.example/poster.jpg');
+});
+
+test('enabled image proxy applies on the first request, blank address selects built-in proxy', () => {
+  localStorage.setItem('enableImageProxy', 'true');
+  localStorage.setItem('imageProxyUrl', '');
+  expect(getInitialPosterUrl(second)).toBe(proxy(second));
+  localStorage.setItem('imageProxyUrl', '/custom-proxy?url=');
+  expect(getInitialPosterUrl(second)).toBe(
+    '/custom-proxy?url=' + encodeURIComponent(second)
+  );
+  localStorage.setItem('enableImageProxy', 'false');
+  expect(getInitialPosterUrl(second)).toBe(second);
 });
