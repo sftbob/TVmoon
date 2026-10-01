@@ -41,3 +41,6 @@ try {
     # Retain the small isolated fixture and reports for inspection; no downloaded media.
     Write-Host "Test artifacts: $scratch"
 }
+# The last child intentionally rejected an unsafe queue. Do not propagate its
+# expected nonzero exit code to the GitHub Actions PowerShell wrapper.
+$global:LASTEXITCODE = 0
