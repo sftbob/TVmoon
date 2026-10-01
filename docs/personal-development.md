@@ -9,7 +9,7 @@ sync/upstream 從個人 main 建立，包含個人修改與上游 merge commit�
 - 未確認新的維護來源前，不切換 URL、不用 allow-unrelated-histories 或 force push。變更固定來源需另一個 PR。
 
 ## 同步流程
-1. 流程 PR 合併後，從 main 手動執行 Upstream Sync。初期沒有排程。
+1. 舊 Upstream Sync 在初次檢查時為 disabled_inactivity。流程 PR 合併後，先確認 main 上已是新的手動版，再於 Actions 啟用此 workflow，從 main 手動執行。初期沒有排程。
 2. 只推送 sync/upstream；衝突、無共同祖先或 automation 變更一律停止並保留紀錄。
 3. 有更新時建立或沿用 draft PR。先審查再批准 GitHub 要求批准的 CI，沒有結果不得合併。
 4. 審查依賴、資料格式、環境變數、workflow 與個人化功能；手動檢查登入、搜尋、播放與部署預覽。
@@ -17,7 +17,7 @@ sync/upstream 從個人 main 建立，包含個人修改與上游 merge commit�
 6. 下次同步先合併新的 main。衝突人工解決，不重置 main。
 
 ## 管理設定
-此 PR 不修改管理設定。CI 首次成功後設定 main ruleset：必須 PR、必要 PR CI / validate 和 Docker 兩平台檢查、禁止 force push 和刪除、機器人不得繞過。個人倉庫可不要求第二位審查者，但本人仍須審查。
+此 PR 的檔案不修改管理設定。CI 首次成功後另外設定 main 保護：必須 PR、必要 validate 和 pr-build 兩平台檢查、禁止 force push 和刪除、管理員不得繞過。個人倉庫不要求第二位審查者，但本人仍須審查。所有 PR 都執行必要檢查，包括文件變更，避免 path filter 造成永久 pending。
 流程 PR 合併前，main 的旧同步仍存在，勿執行旧 Upstream Sync。排程是否啟用須從 Actions 設定確認。
 
 ## 站台與回復
