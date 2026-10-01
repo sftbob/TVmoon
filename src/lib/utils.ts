@@ -36,7 +36,12 @@ export function processImageUrl(originalUrl: string): string {
   if (!originalUrl) return originalUrl;
 
   const proxyUrl = getImageProxyUrl();
-  if (!proxyUrl) return originalUrl;
+  if (!proxyUrl) {
+    if (typeof window !== 'undefined' && window.location.protocol === 'https:' && originalUrl.startsWith('http://')) {
+      return `/api/image-proxy?url=${encodeURIComponent(originalUrl)}`;
+    }
+    return originalUrl;
+  }
 
   return `${proxyUrl}${encodeURIComponent(originalUrl)}`;
 }

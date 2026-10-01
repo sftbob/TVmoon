@@ -708,7 +708,6 @@ function PlayPageClient() {
         detailData = await preferBestSource(sourcesInfo);
       }
 
-      console.log(detailData.source, detailData.id);
 
       setNeedPrefer(false);
       setCurrentSource(detailData.source);
@@ -1054,12 +1053,6 @@ function PlayPageClient() {
       });
 
       lastSaveTimeRef.current = Date.now();
-      console.log('播放进度已保存:', {
-        title: videoTitleRef.current,
-        episode: currentEpisodeIndexRef.current + 1,
-        year: detailRef.current?.year,
-        progress: `${Math.floor(currentTime)}/${Math.floor(duration)}`,
-      });
     } catch (err) {
       console.error('保存播放进度失败:', err);
     }
@@ -1190,7 +1183,6 @@ function PlayPageClient() {
       setError('视频地址无效');
       return;
     }
-    console.log(videoUrl);
 
     // 检测是否为WebKit浏览器
     const isWebkit =
