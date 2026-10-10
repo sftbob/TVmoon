@@ -53,7 +53,7 @@ const DoubanCustomSelector: React.FC<DoubanCustomSelectorProps> = ({
       return 0;
     });
     return sortedTypes.map((type) => ({
-      label: type === 'movie' ? '电影' : '剧集',
+      label: type === 'movie' ? '電影' : '影集',
       value: type,
     }));
   }, [customCategories]);

@@ -34,7 +34,7 @@ const Logo = () => {
       href='/'
       className='flex items-center justify-center h-16 select-none hover:opacity-80 transition-opacity duration-200'
     >
-      <span className='text-2xl font-bold text-green-600 tracking-tight'>
+      <span className='tv-brand text-xl font-semibold tracking-tight'>
         {siteName}
       </span>
     </Link>
@@ -132,7 +132,7 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
     },
     {
       icon: Tv,
-      label: '劇集',
+      label: '影集',
       href: '/douban?type=tv',
     },
     {
@@ -149,7 +149,7 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
         ...prevItems,
         {
           icon: Star,
-          label: '自定義',
+          label: '自訂',
           href: '/douban?type=custom',
         },
       ]);
@@ -162,8 +162,9 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
       <div className='hidden md:flex'>
         <aside
           data-sidebar
+          aria-label='主要導覽'
           className={`fixed top-0 left-0 h-screen bg-white/40 backdrop-blur-xl transition-all duration-300 border-r border-gray-200/50 z-10 shadow-lg dark:bg-gray-900/70 dark:border-gray-700/50 ${
-            isCollapsed ? 'w-16' : 'w-64'
+            isCollapsed ? 'w-16' : 'w-56'
           }`}
           style={{
             backdropFilter: 'blur(20px)',
@@ -183,6 +184,8 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
                 </div>
               </div>
               <button
+                aria-label={isCollapsed ? '展開導覽' : '收合導覽'}
+                aria-expanded={!isCollapsed}
                 onClick={handleToggle}
                 className={`absolute top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100/50 transition-colors duration-200 z-10 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-700/50 ${
                   isCollapsed ? 'left-1/2 -translate-x-1/2' : 'right-2'
@@ -192,6 +195,11 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
               </button>
             </div>
 
+            {!isCollapsed && (
+              <p className='tv-nav-caption px-6 pt-5 text-[10px] tracking-[0.25em]'>
+                私人放映室
+              </p>
+            )}
             {/* 首页和搜索导航 */}
             <nav className='px-2 mt-4 space-y-1'>
               <Link
@@ -273,11 +281,17 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
                 })}
               </div>
             </div>
+            {!isCollapsed && (
+              <div className='tv-sidebar-note mx-6 mb-7 border-t pt-5 text-[10px] leading-6'>
+                <span className='tracking-[0.15em]'>TIANDING CINEMA</span>
+                <p>一部好作品，一段屬於自己的時間。</p>
+              </div>
+            )}
           </div>
         </aside>
         <div
           className={`transition-all duration-300 sidebar-offset ${
-            isCollapsed ? 'w-16' : 'w-64'
+            isCollapsed ? 'w-16' : 'w-56'
           }`}
         ></div>
       </div>

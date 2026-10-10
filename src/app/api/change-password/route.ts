@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   if (storageType === 'localstorage') {
     return NextResponse.json(
       {
-        error: '不支持本地存储模式修改密码',
+        error: '不支援本地儲存模式修改密碼',
       },
       { status: 400 }
     );
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     // 验证新密码
     if (!newPassword || typeof newPassword !== 'string') {
-      return NextResponse.json({ error: '新密码不得为空' }, { status: 400 });
+      return NextResponse.json({ error: '新密碼不得為空' }, { status: 400 });
     }
 
     const username = authInfo.username;
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     // 不允许站长修改密码（站长用户名等于 process.env.USERNAME）
     if (username === process.env.USERNAME) {
       return NextResponse.json(
-        { error: '站长不能通过此接口修改密码' },
+        { error: '站長不能透過此介面修改密碼' },
         { status: 403 }
       );
     }
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     const storage: IStorage | null = getStorage();
     if (!storage || typeof storage.changePassword !== 'function') {
       return NextResponse.json(
-        { error: '存储服务不支持修改密码' },
+        { error: '儲存服務不支援修改密碼' },
         { status: 500 }
       );
     }
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     console.error('修改密码失败:', error);
     return NextResponse.json(
       {
-        error: '修改密码失败',
+        error: '修改密碼失敗',
         details: (error as Error).message,
       },
       { status: 500 }

@@ -188,7 +188,7 @@ export async function searchFromApi(
 }
 
 // 匹配 m3u8 链接的正则
-const M3U8_PATTERN = /(https?:\/\/[^"'\s]+?\.m3u8)/g;
+const M3U8_PATTERN = /(https?:\/\/[^"'\s<>#$]+?\.m3u8(?:\?[^"'\s<>#$]*)?)/g;
 
 export async function getDetailFromApi(
   apiSite: ApiSite,
@@ -236,8 +236,8 @@ export async function getDetailFromApi(
       const episodeList = mainSource.split('#');
       episodes = episodeList
         .map((ep: string) => {
-          const parts = ep.split('$');
-          return parts.length > 1 ? parts[1] : '';
+          const separator = ep.indexOf('$');
+          return separator >= 0 ? ep.slice(separator + 1) : '';
         })
         .filter(
           (url: string) =>
@@ -294,20 +294,19 @@ async function handleSpecialSourceDetail(
 
   if (apiSite.key === 'ffzy') {
     const ffzyPattern =
-      /\$(https?:\/\/[^"'\s]+?\/\d{8}\/\d+_[a-f0-9]+\/index\.m3u8)/g;
+      /\$(https?:\/\/[^"'\s<>#$]+?\/\d{8}\/\d+_[a-f0-9]+\/index\.m3u8(?:\?[^"'\s<>#$]*)?)/g;
     matches = html.match(ffzyPattern) || [];
   }
 
   if (matches.length === 0) {
-    const generalPattern = /\$(https?:\/\/[^"'\s]+?\.m3u8)/g;
+    const generalPattern = /\$(https?:\/\/[^"'\s<>#$]+?\.m3u8(?:\?[^"'\s<>#$]*)?)/g;
     matches = html.match(generalPattern) || [];
   }
 
   // 去重并清理链接前缀
   matches = Array.from(new Set(matches)).map((link: string) => {
     link = link.substring(1); // 去掉开头的 $
-    const parenIndex = link.indexOf('(');
-    return parenIndex > 0 ? link.substring(0, parenIndex) : link;
+    return link;
   });
 
   // 提取标题

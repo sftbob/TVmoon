@@ -59,7 +59,7 @@ const DoubanSelector: React.FC<DoubanSelectorProps> = ({
   // 电视剧选择器选项
   const tvOptions: SelectorOption[] = [
     { label: '全部', value: 'tv' },
-    { label: '國產', value: 'tv_domestic' },
+    { label: '中國', value: 'tv_domestic' },
     { label: '歐美', value: 'tv_american' },
     { label: '日本', value: 'tv_japanese' },
     { label: '韓國', value: 'tv_korean' },
@@ -70,8 +70,8 @@ const DoubanSelector: React.FC<DoubanSelectorProps> = ({
   // 综艺选择器选项
   const showOptions: SelectorOption[] = [
     { label: '全部', value: 'show' },
-    { label: '國內', value: 'show_domestic' },
-    { label: '國外', value: 'show_foreign' },
+    { label: '中國', value: 'show_domestic' },
+    { label: '其他地區', value: 'show_foreign' },
   ];
 
   // 更新指示器位置的通用函数

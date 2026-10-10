@@ -135,7 +135,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
       // 失败时保存错误状态
       setVideoInfoMap((prev) =>
         new Map(prev).set(sourceKey, {
-          quality: '错误',
+          quality: '錯誤',
           loadSpeed: '未知',
           pingTime: 0,
           hasError: true,
@@ -504,8 +504,11 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                               loading='lazy'
                               referrerPolicy='no-referrer'
                               onLoad={(e) => {
-                                if (e.currentTarget.dataset.proxyAttempt ||
-                                    getInitialPosterUrl(source.poster) !== source.poster) {
+                                if (
+                                  e.currentTarget.dataset.proxyAttempt ||
+                                  getInitialPosterUrl(source.poster) !==
+                                    source.poster
+                                ) {
                                   rememberPosterProxyHost(source.poster);
                                 }
                               }}
@@ -513,7 +516,9 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                                 const target = e.target as HTMLImageElement;
                                 if (!target.dataset.proxyAttempt) {
                                   target.dataset.proxyAttempt = 'true';
-                                  target.src = getImageProxyFallbackUrl(source.poster);
+                                  target.src = getImageProxyFallbackUrl(
+                                    source.poster
+                                  );
                                 } else {
                                   target.style.display = 'none';
                                 }
@@ -609,7 +614,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                                 } else {
                                   return (
                                     <div className='text-red-500/90 dark:text-red-400 font-medium text-xs'>
-                                      無測速數據
+                                      無測速資料
                                     </div>
                                   ); // 占位div
                                 }
@@ -631,7 +636,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({
                     }}
                     className='w-full text-center text-xs text-gray-500 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors py-2'
                   >
-                    影片匹配有誤？點擊去搜尋
+                    影片匹配有誤？點選去搜尋
                   </button>
                 </div>
               </div>

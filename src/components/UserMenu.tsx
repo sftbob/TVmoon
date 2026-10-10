@@ -10,6 +10,8 @@ import { createPortal } from 'react-dom';
 import { getAuthInfoFromBrowserCookie } from '@/lib/auth';
 import { checkForUpdates, CURRENT_VERSION, UpdateStatus } from '@/lib/version';
 
+import PwaInstallButton from '@/components/PwaInstallButton';
+
 interface AuthInfo {
   username?: string;
   role?: 'owner' | 'admin' | 'user';
@@ -169,12 +171,12 @@ export const UserMenu: React.FC = () => {
 
     // 验证密码
     if (!newPassword) {
-      setPasswordError('新密码不得为空');
+      setPasswordError('新密碼不得為空');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setPasswordError('两次输入的密码不一致');
+      setPasswordError('兩次輸入的密碼不一致');
       return;
     }
 
@@ -194,7 +196,7 @@ export const UserMenu: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setPasswordError(data.error || '修改密码失败');
+        setPasswordError(data.error || '修改密碼失敗');
         return;
       }
 
@@ -202,7 +204,7 @@ export const UserMenu: React.FC = () => {
       setIsChangePasswordOpen(false);
       await handleLogout();
     } catch (error) {
-      setPasswordError('网络错误，请稍后重试');
+      setPasswordError('網路錯誤，請稍後再試一次');
     } finally {
       setPasswordLoading(false);
     }
@@ -300,11 +302,11 @@ export const UserMenu: React.FC = () => {
   const getRoleText = (role?: string) => {
     switch (role) {
       case 'owner':
-        return '站长';
+        return '站長';
       case 'admin':
-        return '管理员';
+        return '管理員';
       case 'user':
-        return '用户';
+        return '使用者';
       default:
         return '';
     }
@@ -320,7 +322,7 @@ export const UserMenu: React.FC = () => {
       />
 
       {/* 菜单面板 */}
-      <div className='fixed top-14 right-4 w-56 bg-white dark:bg-gray-900 rounded-lg shadow-xl z-[1001] border border-gray-200/50 dark:border-gray-700/50 overflow-hidden select-none'>
+      <div className='tv-overlay fixed top-14 right-4 w-56 bg-white dark:bg-gray-900 rounded-lg shadow-xl z-[1001] border border-gray-200/50 dark:border-gray-700/50 overflow-hidden select-none'>
         {/* 用户信息区域 */}
         <div className='px-3 py-2.5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100/50 dark:from-gray-800 dark:to-gray-800/50'>
           <div className='space-y-1'>
@@ -345,7 +347,7 @@ export const UserMenu: React.FC = () => {
                 {authInfo?.username || 'default'}
               </div>
               <div className='text-[10px] text-gray-400 dark:text-gray-500'>
-                數據存儲：
+                資料儲存：
                 {storageType === 'localstorage' ? '本地' : storageType}
               </div>
             </div>
@@ -354,6 +356,7 @@ export const UserMenu: React.FC = () => {
 
         {/* 菜单项 */}
         <div className='py-1'>
+          <PwaInstallButton />
           {/* 设置按钮 */}
           <button
             onClick={handleSettings}
@@ -439,7 +442,12 @@ export const UserMenu: React.FC = () => {
       />
 
       {/* 设置面板 */}
-      <div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-xl z-[1001] p-6'>
+      <div
+        role='dialog'
+        aria-modal='true'
+        aria-label='本地設定'
+        className='tv-overlay fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%_-_2rem)] max-w-md max-h-[85dvh] overflow-y-auto bg-white dark:bg-gray-900 rounded-xl shadow-xl z-[1001] p-6'
+      >
         {/* 标题栏 */}
         <div className='flex items-center justify-between mb-6'>
           <div className='flex items-center gap-3'>
@@ -449,7 +457,7 @@ export const UserMenu: React.FC = () => {
             <button
               onClick={handleResetSettings}
               className='px-2 py-1 text-xs text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border border-red-200 hover:border-red-300 dark:border-red-800 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors'
-              title='重置為默認設定'
+              title='重置為預設設定'
             >
               重置
             </button>
@@ -469,10 +477,10 @@ export const UserMenu: React.FC = () => {
           <div className='flex items-center justify-between'>
             <div>
               <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                默認聚合搜尋結果
+                預設聚合搜尋結果
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                搜尋時默認按標題和年份聚合顯示結果
+                搜尋時預設按標題和年份聚合顯示結果
               </p>
             </div>
             <label className='flex items-center cursor-pointer'>
@@ -523,7 +531,7 @@ export const UserMenu: React.FC = () => {
                 啟用豆瓣代理
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                啟用后，豆瓣數據將通過代理伺服器獲取
+                啟用後，豆瓣資料將透過代理伺服器取得
               </p>
             </div>
             <label className='flex items-center cursor-pointer'>
@@ -544,7 +552,7 @@ export const UserMenu: React.FC = () => {
           <div className='space-y-3'>
             <div>
               <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                豆瓣代理地址
+                豆瓣代理網址
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
                 僅在啟用豆瓣代理時生效，留空則使用伺服器 API
@@ -574,7 +582,7 @@ export const UserMenu: React.FC = () => {
                 啟用圖片代理
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                啟用后，所有圖片加載將通過代理伺服器
+                所有海報優先走代理；豆瓣海報預設自動使用內建代理
               </p>
             </div>
             <label className='flex items-center cursor-pointer'>
@@ -582,6 +590,7 @@ export const UserMenu: React.FC = () => {
                 <input
                   type='checkbox'
                   className='sr-only peer'
+                  aria-label='啟用圖片代理'
                   checked={enableImageProxy}
                   onChange={(e) => handleImageProxyToggle(e.target.checked)}
                 />
@@ -595,10 +604,10 @@ export const UserMenu: React.FC = () => {
           <div className='space-y-3'>
             <div>
               <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                圖片代理地址
+                圖片代理網址
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                僅在啟用圖片代理時生效
+                留空使用內建代理，不需要另外尋找代理網址
               </p>
             </div>
             <input
@@ -609,6 +618,7 @@ export const UserMenu: React.FC = () => {
                   : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 text-gray-400 dark:text-gray-500 placeholder-gray-400 dark:placeholder-gray-600 cursor-not-allowed'
               }`}
               placeholder='例如: https://imageproxy.example.com/?url='
+              aria-label='圖片代理網址'
               value={imageProxyUrl}
               onChange={(e) => handleImageProxyUrlChange(e.target.value)}
               disabled={!enableImageProxy}
@@ -619,7 +629,7 @@ export const UserMenu: React.FC = () => {
         {/* 底部说明 */}
         <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700'>
           <p className='text-xs text-gray-500 dark:text-gray-400 text-center'>
-            這些設定保存在本地瀏覽器中
+            設定自動儲存在此瀏覽器，變更後請重新整理頁面
           </p>
         </div>
       </div>
@@ -712,7 +722,7 @@ export const UserMenu: React.FC = () => {
         {/* 底部说明 */}
         <div className='mt-4 pt-4 border-t border-gray-200 dark:border-gray-700'>
           <p className='text-xs text-gray-500 dark:text-gray-400 text-center'>
-            修改密碼后需要重新登錄
+            修改密碼後需要重新登入
           </p>
         </div>
       </div>

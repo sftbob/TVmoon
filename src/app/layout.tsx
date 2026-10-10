@@ -1,40 +1,48 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Noto_Serif_TC } from 'next/font/google';
 
 import './globals.css';
+import '../styles/cinema.css';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 import { getConfig } from '@/lib/config';
 import RuntimeConfig from '@/lib/runtime';
 
+import { PwaInstallProvider } from '@/components/PwaInstallButton';
+
 import { GlobalErrorIndicator } from '../components/GlobalErrorIndicator';
 import { SiteProvider } from '../components/SiteProvider';
 import { ThemeProvider } from '../components/ThemeProvider';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'], display: 'swap' });
+const cinemaSerif = Noto_Serif_TC({
+  subsets: ['latin'],
+  weight: ['500', '600'],
+  display: 'swap',
+  preload: false,
+  variable: '--font-cinema-serif',
+});
 
-// 动态生成 metadata，支持配置更新后的标题变化
+// Keep the browser and installed app identity consistent.
 export async function generateMetadata(): Promise<Metadata> {
-  let siteName = process.env.SITE_NAME || 'MoonTV';
-  if (
-    process.env.NEXT_PUBLIC_STORAGE_TYPE !== 'd1' &&
-    process.env.NEXT_PUBLIC_STORAGE_TYPE !== 'upstash'
-  ) {
-    const config = await getConfig();
-    siteName = config.SiteConfig.SiteName;
-  }
+  const siteName = '添丁電影院';
 
   return {
     title: siteName,
     description: '影視聚合',
     manifest: '/manifest.json',
+    appleWebApp: {
+      capable: true,
+      title: siteName,
+      statusBarStyle: 'black-translucent',
+    },
   };
 }
 
 export const viewport: Viewport = {
-  themeColor: '#000000',
+  themeColor: '#f3f0e9',
   viewportFit: 'cover',
 };
 
@@ -43,10 +51,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let siteName = process.env.SITE_NAME || 'MoonTV';
+  const siteName = '添丁電影院';
   let announcement =
     process.env.ANNOUNCEMENT ||
-    '本网站仅提供影视信息搜索服务，所有内容均来自第三方网站。本站不存储任何视频资源，不对任何内容的准确性、合法性、完整性负责。';
+    '本網站僅提供影視資訊搜尋服務，所有內容均來自第三方網站。本站不儲存任何影片資源，不對任何內容的準確性、合法性、完整性負責。';
   let enableRegister = process.env.NEXT_PUBLIC_ENABLE_REGISTER === 'true';
   let imageProxy = process.env.NEXT_PUBLIC_IMAGE_PROXY || '';
   let doubanProxy = process.env.NEXT_PUBLIC_DOUBAN_PROXY || '';
@@ -63,7 +71,6 @@ export default async function RootLayout({
     process.env.NEXT_PUBLIC_STORAGE_TYPE !== 'upstash'
   ) {
     const config = await getConfig();
-    siteName = config.SiteConfig.SiteName;
     announcement = config.SiteConfig.Announcement;
     enableRegister = config.UserConfig.AllowRegister;
     imageProxy = config.SiteConfig.ImageProxy;
@@ -89,7 +96,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang='zh-Hant' suppressHydrationWarning>
+    <html lang='zh-Hant-TW' suppressHydrationWarning>
       <head>
         <meta
           name='viewport'
@@ -100,12 +107,14 @@ export default async function RootLayout({
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.RUNTIME_CONFIG = ${JSON.stringify(runtimeConfig).replace(/</g, '\\u003c')};`,
+            __html: `window.RUNTIME_CONFIG = ${JSON.stringify(
+              runtimeConfig
+            ).replace(/</g, '\\u003c')};`,
           }}
         />
       </head>
       <body
-        className={`${inter.className} min-h-screen bg-white text-gray-900 dark:bg-black dark:text-gray-200`}
+        className={`${inter.className} ${cinemaSerif.variable} min-h-screen bg-white text-gray-900 dark:bg-black dark:text-gray-200`}
       >
         <ThemeProvider
           attribute='class'
@@ -114,7 +123,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <SiteProvider siteName={siteName} announcement={announcement}>
-            {children}
+            <PwaInstallProvider>{children}</PwaInstallProvider>
             <GlobalErrorIndicator />
           </SiteProvider>
         </ThemeProvider>

@@ -17,6 +17,7 @@ import { getDoubanCategories } from '@/lib/douban.client';
 import { DoubanItem } from '@/lib/types';
 
 import CapsuleSwitch from '@/components/CapsuleSwitch';
+import CinemaHero from '@/components/CinemaHero';
 import ContinueWatching from '@/components/ContinueWatching';
 import PageLayout from '@/components/PageLayout';
 import ScrollableRow from '@/components/ScrollableRow';
@@ -156,46 +157,51 @@ function HomeClient() {
 
   return (
     <PageLayout>
-      <div className="px-2 sm:px-10 py-4 sm:py-8 overflow-visible">
+      <div className='tv-home px-4 sm:px-8 lg:px-10 py-5 sm:py-8 overflow-visible'>
+        {activeTab === 'home' && <CinemaHero movies={hotMovies} />}
         {announcement && showAnnouncement && (
           <aside
-            aria-label="站臺公告"
-            className="mx-auto mb-5 flex max-w-6xl items-start gap-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm leading-relaxed text-green-900 dark:border-green-900 dark:bg-green-950/40 dark:text-green-100"
+            aria-label='站臺公告'
+            className='tv-announcement mx-auto mb-5 flex max-w-6xl items-start gap-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm leading-relaxed text-green-900 dark:border-green-900 dark:bg-green-950/40 dark:text-green-100'
           >
-            <p className="flex-1 break-words">{announcement}</p>
+            <p className='flex-1 break-words'>{announcement}</p>
             <button
-              type="button"
+              type='button'
               onClick={() => handleCloseAnnouncement(announcement)}
-              aria-label="關閉公告"
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-green-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-600 dark:hover:bg-green-900"
+              aria-label='關閉公告'
+              className='flex h-11 w-11 shrink-0 items-center justify-center rounded-lg hover:bg-green-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-600 dark:hover:bg-green-900'
             >
-              <X className="h-5 w-5" />
+              <X className='h-5 w-5' />
             </button>
           </aside>
         )}
         {/* 顶部 Tab 切换 */}
-        <div className="mb-8 flex justify-center">
+        <div className='tv-home-tabs mb-8 flex items-center justify-between'>
+          <div>
+            <p className='tv-eyebrow'>YOUR COLLECTION</p>
+            <h2 className='tv-collection-title'>今日的觀影提案</h2>
+          </div>
           <CapsuleSwitch
             options={[
               { label: '首頁', value: 'home' },
-              { label: '收藏夾', value: 'favorites' },
+              { label: '收藏清單', value: 'favorites' },
             ]}
             active={activeTab}
             onChange={(value) => setActiveTab(value as 'home' | 'favorites')}
           />
         </div>
 
-        <div className="max-w-6xl mx-auto">
+        <div className='max-w-6xl mx-auto'>
           {activeTab === 'favorites' ? (
             // 收藏夹视图
-            <section className="mb-8">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
+            <section className='mb-8'>
+              <div className='mb-4 flex items-center justify-between'>
+                <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
                   我的收藏
                 </h2>
                 {favoriteItems.length > 0 && (
                   <button
-                    className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    className='text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                     onClick={async () => {
                       await clearAllFavorites();
                       setFavoriteItems([]);
@@ -205,19 +211,19 @@ function HomeClient() {
                   </button>
                 )}
               </div>
-              <div className="justify-start grid grid-cols-2 gap-x-3 gap-y-12 min-[420px]:grid-cols-3 sm:gap-y-16 px-0 sm:px-2 sm:grid-cols-[repeat(auto-fill,_minmax(11rem,_1fr))] sm:gap-x-8">
+              <div className='justify-start grid grid-cols-2 gap-x-3 gap-y-12 min-[420px]:grid-cols-3 sm:gap-y-16 px-0 sm:px-2 sm:grid-cols-[repeat(auto-fill,_minmax(11rem,_1fr))] sm:gap-x-8'>
                 {favoriteItems.map((item) => (
-                  <div key={item.id + item.source} className="w-full">
+                  <div key={item.id + item.source} className='w-full'>
                     <VideoCard
                       query={item.search_title}
                       {...item}
-                      from="favorite"
+                      from='favorite'
                       type={item.episodes > 1 ? 'tv' : ''}
                     />
                   </div>
                 ))}
                 {favoriteItems.length === 0 && (
-                  <div className="col-span-full text-center text-gray-500 py-8 dark:text-gray-400">
+                  <div className='col-span-full text-center text-gray-500 py-8 dark:text-gray-400'>
                     暫無收藏內容
                   </div>
                 )}
@@ -230,17 +236,17 @@ function HomeClient() {
               <ContinueWatching />
 
               {/* 热门电影 */}
-              <section className="mb-8">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
+              <section className='mb-8'>
+                <div className='mb-4 flex items-center justify-between'>
+                  <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
                     熱門電影
                   </h2>
                   <Link
-                    href="/douban?type=movie"
-                    className="flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    href='/douban?type=movie'
+                    className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
-                    <ChevronRight className="w-4 h-4 ml-1" />
+                    檢視更多
+                    <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>
                 <ScrollableRow>
@@ -249,28 +255,28 @@ function HomeClient() {
                       Array.from({ length: 8 }).map((_, index) => (
                         <div
                           key={index}
-                          className="min-w-[96px] w-24 sm:min-w-[180px] sm:w-44"
+                          className='min-w-[132px] w-[132px] sm:min-w-[172px] sm:w-[172px]'
                         >
-                          <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-gray-200 animate-pulse dark:bg-gray-800">
-                            <div className="absolute inset-0 bg-gray-300 dark:bg-gray-700"></div>
+                          <div className='relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-gray-200 animate-pulse dark:bg-gray-800'>
+                            <div className='absolute inset-0 bg-gray-300 dark:bg-gray-700'></div>
                           </div>
-                          <div className="mt-2 h-4 bg-gray-200 rounded animate-pulse dark:bg-gray-800"></div>
+                          <div className='mt-2 h-4 bg-gray-200 rounded animate-pulse dark:bg-gray-800'></div>
                         </div>
                       ))
                     : // 显示真实数据
                       hotMovies.map((movie, index) => (
                         <div
                           key={index}
-                          className="min-w-[96px] w-24 sm:min-w-[180px] sm:w-44"
+                          className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                         >
                           <VideoCard
-                            from="douban"
+                            from='douban'
                             title={movie.title}
                             poster={movie.poster}
                             douban_id={Number(movie.id)}
                             rate={movie.rate}
                             year={movie.year}
-                            type="movie"
+                            type='movie'
                           />
                         </div>
                       ))}
@@ -278,17 +284,17 @@ function HomeClient() {
               </section>
 
               {/* 热门剧集 */}
-              <section className="mb-8">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
-                    熱門劇集
+              <section className='mb-8'>
+                <div className='mb-4 flex items-center justify-between'>
+                  <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
+                    熱門影集
                   </h2>
                   <Link
-                    href="/douban?type=tv"
-                    className="flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    href='/douban?type=tv'
+                    className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
-                    <ChevronRight className="w-4 h-4 ml-1" />
+                    檢視更多
+                    <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>
                 <ScrollableRow>
@@ -297,22 +303,22 @@ function HomeClient() {
                       Array.from({ length: 8 }).map((_, index) => (
                         <div
                           key={index}
-                          className="min-w-[96px] w-24 sm:min-w-[180px] sm:w-44"
+                          className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                         >
-                          <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-gray-200 animate-pulse dark:bg-gray-800">
-                            <div className="absolute inset-0 bg-gray-300 dark:bg-gray-700"></div>
+                          <div className='relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-gray-200 animate-pulse dark:bg-gray-800'>
+                            <div className='absolute inset-0 bg-gray-300 dark:bg-gray-700'></div>
                           </div>
-                          <div className="mt-2 h-4 bg-gray-200 rounded animate-pulse dark:bg-gray-800"></div>
+                          <div className='mt-2 h-4 bg-gray-200 rounded animate-pulse dark:bg-gray-800'></div>
                         </div>
                       ))
                     : // 显示真实数据
                       hotTvShows.map((show, index) => (
                         <div
                           key={index}
-                          className="min-w-[96px] w-24 sm:min-w-[180px] sm:w-44"
+                          className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                         >
                           <VideoCard
-                            from="douban"
+                            from='douban'
                             title={show.title}
                             poster={show.poster}
                             douban_id={Number(show.id)}
@@ -325,17 +331,17 @@ function HomeClient() {
               </section>
 
               {/* 热门综艺 */}
-              <section className="mb-8">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
+              <section className='mb-8'>
+                <div className='mb-4 flex items-center justify-between'>
+                  <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
                     熱門綜藝
                   </h2>
                   <Link
-                    href="/douban?type=show"
-                    className="flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    href='/douban?type=show'
+                    className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
-                    <ChevronRight className="w-4 h-4 ml-1" />
+                    檢視更多
+                    <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>
                 <ScrollableRow>
@@ -344,22 +350,22 @@ function HomeClient() {
                       Array.from({ length: 8 }).map((_, index) => (
                         <div
                           key={index}
-                          className="min-w-[96px] w-24 sm:min-w-[180px] sm:w-44"
+                          className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                         >
-                          <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-gray-200 animate-pulse dark:bg-gray-800">
-                            <div className="absolute inset-0 bg-gray-300 dark:bg-gray-700"></div>
+                          <div className='relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-gray-200 animate-pulse dark:bg-gray-800'>
+                            <div className='absolute inset-0 bg-gray-300 dark:bg-gray-700'></div>
                           </div>
-                          <div className="mt-2 h-4 bg-gray-200 rounded animate-pulse dark:bg-gray-800"></div>
+                          <div className='mt-2 h-4 bg-gray-200 rounded animate-pulse dark:bg-gray-800'></div>
                         </div>
                       ))
                     : // 显示真实数据
                       hotVarietyShows.map((show, index) => (
                         <div
                           key={index}
-                          className="min-w-[96px] w-24 sm:min-w-[180px] sm:w-44"
+                          className='min-w-[96px] w-24 sm:min-w-[180px] sm:w-44'
                         >
                           <VideoCard
-                            from="douban"
+                            from='douban'
                             title={show.title}
                             poster={show.poster}
                             douban_id={Number(show.id)}

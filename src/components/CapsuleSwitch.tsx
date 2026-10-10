@@ -62,7 +62,7 @@ const CapsuleSwitch: React.FC<CapsuleSwitchProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`relative inline-flex bg-gray-300/80 rounded-full p-1 dark:bg-gray-700 ${
+      className={`tv-capsule relative inline-flex bg-gray-300/80 rounded-full p-1 dark:bg-gray-700 ${
         className || ''
       }`}
     >

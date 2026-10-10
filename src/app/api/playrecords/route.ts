@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
         (u) => u.username === authInfo.username
       );
       if (user && user.banned) {
-        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '使用者已被封禁' }, { status: 401 });
       }
     }
 
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
         (u) => u.username === authInfo.username
       );
       if (user && user.banned) {
-        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '使用者已被封禁' }, { status: 401 });
       }
     }
 
@@ -117,7 +117,7 @@ export async function DELETE(request: NextRequest) {
         (u) => u.username === authInfo.username
       );
       if (user && user.banned) {
-        return NextResponse.json({ error: '用户已被封禁' }, { status: 401 });
+        return NextResponse.json({ error: '使用者已被封禁' }, { status: 401 });
       }
     }
 

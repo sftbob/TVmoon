@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   if (!query || !resourceId) {
     const cacheTime = await getCacheTime();
     return NextResponse.json(
-      { result: null, error: '缺少必要参数: q 或 resourceId' },
+      { result: null, error: '缺少必要參數: q 或 resourceId' },
       {
         headers: {
           'Cache-Control': `public, max-age=${cacheTime}, s-maxage=${cacheTime}`,
@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     if (!targetSite) {
       return NextResponse.json(
         {
-          error: `未找到指定的视频源: ${resourceId}`,
+          error: `未找到指定的片源: ${resourceId}`,
           result: null,
         },
         { status: 404 }
@@ -55,7 +55,7 @@ export async function GET(request: Request) {
     if (result.length === 0) {
       return NextResponse.json(
         {
-          error: '未找到结果',
+          error: '未找到結果',
           result: null,
         },
         { status: 404 }
@@ -75,7 +75,7 @@ export async function GET(request: Request) {
   } catch (error) {
     return NextResponse.json(
       {
-        error: '搜索失败',
+        error: '搜尋失敗',
         result: null,
       },
       { status: 500 }
