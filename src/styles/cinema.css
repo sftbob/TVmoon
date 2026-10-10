@@ -607,3 +607,14 @@ html.dark body {
     animation: none !important;
   }
 }
+
+.tv-shell .tv-capsule {
+  background: var(--tv-soft);
+  border: 1px solid var(--tv-line);
+}
+.tv-shell .tv-capsule > div {
+  background: var(--tv-surface);
+}
+.tv-shell .tv-capsule button {
+  color: var(--tv-ink);
+}

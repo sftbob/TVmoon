@@ -281,6 +281,12 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
                 })}
               </div>
             </div>
+            {!isCollapsed && (
+              <div className='tv-sidebar-note mx-6 mb-7 border-t pt-5 text-[10px] leading-6'>
+                <span className='tracking-[0.15em]'>TIANDING CINEMA</span>
+                <p>一部好作品，一段屬於自己的時間。</p>
+              </div>
+            )}
           </div>
         </aside>
         <div
