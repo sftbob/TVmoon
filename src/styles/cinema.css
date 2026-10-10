@@ -23,8 +23,8 @@
   --tv-rose: #d0a49b;
   --tv-shadow: 0 18px 42px #00000026;
 }
-html:not(.dark) body,
-html.dark body {
+html:not(.dark) body[class],
+html.dark body[class] {
   background: var(--tv-bg);
   color: var(--tv-ink);
 }
@@ -451,7 +451,7 @@ html.dark body {
   border-color: var(--tv-line);
   box-shadow: var(--tv-shadow);
 }
-.tv-overlay input {
+.tv-overlay input[class] {
   color: var(--tv-ink);
   background: var(--tv-bg);
   border-color: var(--tv-line);
@@ -473,7 +473,7 @@ html.dark body {
   letter-spacing: 0.1em;
   margin-bottom: 35px;
 }
-.tv-auth input {
+.tv-auth input[class] {
   background: var(--tv-bg);
   border: 1px solid var(--tv-line);
   box-shadow: none;
