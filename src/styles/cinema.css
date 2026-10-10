@@ -618,3 +618,123 @@ html.dark body[class] {
 .tv-shell .tv-capsule button {
   color: var(--tv-ink);
 }
+
+/* Shared search and playback preparation, without simulated percentages. */
+.tv-loading-page {
+  min-height: calc(100dvh - 156px);
+  display: grid;
+  place-items: center;
+  padding: 32px 20px;
+}
+.tv-loading {
+  width: min(100%, 440px);
+  margin: auto;
+  padding: 48px 28px;
+  text-align: center;
+  color: var(--tv-ink);
+}
+.tv-loading-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 30px;
+  color: var(--tv-accent);
+  background: var(--tv-accent-soft);
+  border-radius: 50%;
+}
+.tv-loading-orbit {
+  position: absolute;
+  inset: -9px;
+  border: 1px solid var(--tv-line);
+  border-top-color: var(--tv-rose);
+  border-radius: 50%;
+  animation: cinema-orbit 5s linear infinite;
+}
+.tv-loading-dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tv-rose);
+  right: 3px;
+  top: 10px;
+}
+.tv-loading-brand {
+  color: var(--tv-muted);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  margin-bottom: 16px;
+}
+.tv-shell .tv-loading h2 {
+  font-family: var(--font-cinema-serif), 'Songti TC', serif;
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+}
+.tv-loading-caption {
+  color: var(--tv-muted);
+  font-size: 12px;
+  margin-top: 12px;
+  letter-spacing: 0.08em;
+}
+.tv-loading-steps {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 25px 0 0;
+  margin-top: 28px;
+  border-top: 1px solid var(--tv-line);
+  font-size: 11px;
+  color: var(--tv-muted);
+}
+.tv-loading-steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tv-loading-steps li > span {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  opacity: 0.6;
+}
+.tv-loading-steps li[aria-current='step'] {
+  color: var(--tv-accent);
+  font-weight: 600;
+}
+.tv-loading-steps li[aria-current='step'] > span {
+  opacity: 1;
+}
+.tv-loading-steps li[data-complete='true'] > span {
+  color: var(--tv-rose);
+}
+.tv-loading-compact {
+  padding: 30px 20px;
+}
+.tv-loading-compact .tv-loading-mark {
+  width: 58px;
+  height: 58px;
+  margin-bottom: 22px;
+}
+.tv-loading-compact .tv-loading-brand {
+  margin-bottom: 10px;
+  font-size: 9px;
+}
+.tv-shell .tv-loading-compact h2 {
+  font-size: 20px;
+}
+.tv-loading-overlay {
+  background: var(--tv-bg);
+}
+@keyframes cinema-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tv-loading-orbit {
+    animation: none;
+  }
+}

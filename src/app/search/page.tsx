@@ -15,6 +15,7 @@ import {
 import { SearchResult } from '@/lib/types';
 import { yellowWords } from '@/lib/yellow';
 
+import CinemaLoading from '@/components/CinemaLoading';
 import PageLayout from '@/components/PageLayout';
 import VideoCard from '@/components/VideoCard';
 
@@ -290,9 +291,7 @@ function SearchPageClient() {
         {/* 搜索结果或搜索历史 */}
         <div className='max-w-[95%] mx-auto mt-12 overflow-visible'>
           {isLoading ? (
-            <div className='flex justify-center items-center h-40'>
-              <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-green-500'></div>
-            </div>
+            <CinemaLoading compact message='正在搜尋好故事…' />
           ) : searchError ? (
             <div
               role='alert'
