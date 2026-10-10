@@ -668,7 +668,7 @@ function PlayPageClient() {
       setLoadingStage(currentSource && currentId ? 'fetching' : 'searching');
       setLoadingMessage(
         currentSource && currentId
-          ? '🎬 正在获取视频详情...'
+          ? '正在取得影片資訊…'
           : '正在尋找播放來源…'
       );
 
