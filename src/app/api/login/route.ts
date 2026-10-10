@@ -9,7 +9,7 @@ export const runtime = 'edge';
 export async function POST(req: NextRequest) {
   try {
     if (!process.env.PASSWORD) {
-      return NextResponse.json({ error: '尚未設定站台密碼' }, { status: 503 });
+      return NextResponse.json({ error: '尚未設定站臺密碼' }, { status: 503 });
     }
     const storageType = process.env.NEXT_PUBLIC_STORAGE_TYPE || 'localstorage';
     const { username, password } = await req.json();
@@ -31,14 +31,14 @@ export async function POST(req: NextRequest) {
     }
     if (typeof username !== 'string' || !username) {
       return NextResponse.json(
-        { error: '使用者名稱不得為空' },
+        { error: '使用者名稱稱不得為空' },
         { status: 400 }
       );
     }
     if (username === process.env.USERNAME) {
       if (password !== process.env.PASSWORD) {
         return NextResponse.json(
-          { error: '使用者名稱或密碼錯誤' },
+          { error: '使用者名稱稱或密碼錯誤' },
           { status: 401 }
         );
       }
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     );
     if (user?.banned || !(await db.verifyUser(username, password))) {
       return NextResponse.json(
-        { error: '使用者名稱或密碼錯誤' },
+        { error: '使用者名稱稱或密碼錯誤' },
         { status: 401 }
       );
     }

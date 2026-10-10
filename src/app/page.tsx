@@ -184,7 +184,7 @@ function HomeClient() {
           <CapsuleSwitch
             options={[
               { label: '首頁', value: 'home' },
-              { label: '收藏夾', value: 'favorites' },
+              { label: '收藏清單', value: 'favorites' },
             ]}
             active={activeTab}
             onChange={(value) => setActiveTab(value as 'home' | 'favorites')}
@@ -245,7 +245,7 @@ function HomeClient() {
                     href='/douban?type=movie'
                     className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
+                    檢視更多
                     <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>
@@ -287,13 +287,13 @@ function HomeClient() {
               <section className='mb-8'>
                 <div className='mb-4 flex items-center justify-between'>
                   <h2 className='text-xl font-bold text-gray-800 dark:text-gray-200'>
-                    熱門劇集
+                    熱門影集
                   </h2>
                   <Link
                     href='/douban?type=tv'
                     className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
+                    檢視更多
                     <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>
@@ -340,7 +340,7 @@ function HomeClient() {
                     href='/douban?type=show'
                     className='flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   >
-                    查看更多
+                    檢視更多
                     <ChevronRight className='w-4 h-4 ml-1' />
                   </Link>
                 </div>

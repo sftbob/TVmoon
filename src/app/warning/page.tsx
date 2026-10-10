@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: '安全警告 - 添丁電影院',
-  description: '站點安全配置警告',
+  description: '網站安全設定警告',
 };
 
 export default function WarningPage() {
@@ -31,7 +31,7 @@ export default function WarningPage() {
         {/* 标题 */}
         <div className='text-center mb-6 sm:mb-8'>
           <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 mb-2'>
-            安全合規配置警告
+            安全合規設定警告
           </h1>
           <div className='w-12 sm:w-16 h-1 bg-red-500 mx-auto rounded-full'></div>
         </div>
@@ -43,7 +43,7 @@ export default function WarningPage() {
               ⚠️ 安全風險提示
             </p>
             <p className='text-sm sm:text-base text-red-700'>
-              檢測到您的站點未配置訪問控制，存在潛在的安全風險和法律合規問題。
+              檢測到您的網站未設定存取控制，存在潛在的安全風險和法律合規問題。
             </p>
           </div>
 
@@ -54,7 +54,7 @@ export default function WarningPage() {
             <ul className='space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600'>
               <li className='flex items-start'>
                 <span className='text-red-500 mr-2 mt-0.5'>•</span>
-                <span>未經授權的訪問可能導致內容被惡意傳播</span>
+                <span>未經授權的存取可能導致內容被惡意傳播</span>
               </li>
               <li className='flex items-start'>
                 <span className='text-red-500 mr-2 mt-0.5'>•</span>
@@ -73,14 +73,14 @@ export default function WarningPage() {
 
           <div className='bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4'>
             <h3 className='text-base sm:text-lg font-semibold text-yellow-800 mb-2'>
-              🔒 安全配置建議
+              🔒 安全設定建議
             </h3>
             <p className='text-sm sm:text-base text-yellow-700'>
-              請立即配置{' '}
+              請立即設定{' '}
               <code className='bg-yellow-100 px-1.5 py-0.5 rounded text-xs sm:text-sm font-mono'>
                 PASSWORD
               </code>{' '}
-              環境變量以啟用訪問控制。
+              環境變數以啟用存取控制。
             </p>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function WarningPage() {
         {/* 底部装饰 */}
         <div className='mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200'>
           <div className='text-center text-xs sm:text-sm text-gray-500'>
-            <p>為確保系統安全性和合規性，請及時完成安全配置</p>
+            <p>為確保系統安全性和合規性，請及時完成安全設定</p>
           </div>
         </div>
       </div>

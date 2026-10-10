@@ -171,12 +171,12 @@ export const UserMenu: React.FC = () => {
 
     // 验证密码
     if (!newPassword) {
-      setPasswordError('新密码不得为空');
+      setPasswordError('新密碼不得為空');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setPasswordError('两次输入的密码不一致');
+      setPasswordError('兩次輸入的密碼不一致');
       return;
     }
 
@@ -196,7 +196,7 @@ export const UserMenu: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setPasswordError(data.error || '修改密码失败');
+        setPasswordError(data.error || '修改密碼失敗');
         return;
       }
 
@@ -204,7 +204,7 @@ export const UserMenu: React.FC = () => {
       setIsChangePasswordOpen(false);
       await handleLogout();
     } catch (error) {
-      setPasswordError('网络错误，请稍后重试');
+      setPasswordError('網路錯誤，請稍後再試一次');
     } finally {
       setPasswordLoading(false);
     }
@@ -302,11 +302,11 @@ export const UserMenu: React.FC = () => {
   const getRoleText = (role?: string) => {
     switch (role) {
       case 'owner':
-        return '站长';
+        return '站長';
       case 'admin':
-        return '管理员';
+        return '管理員';
       case 'user':
-        return '用户';
+        return '使用者';
       default:
         return '';
     }
@@ -347,7 +347,7 @@ export const UserMenu: React.FC = () => {
                 {authInfo?.username || 'default'}
               </div>
               <div className='text-[10px] text-gray-400 dark:text-gray-500'>
-                數據存儲：
+                資料儲存：
                 {storageType === 'localstorage' ? '本地' : storageType}
               </div>
             </div>
@@ -457,7 +457,7 @@ export const UserMenu: React.FC = () => {
             <button
               onClick={handleResetSettings}
               className='px-2 py-1 text-xs text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border border-red-200 hover:border-red-300 dark:border-red-800 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors'
-              title='重置為默認設定'
+              title='重置為預設設定'
             >
               重置
             </button>
@@ -477,10 +477,10 @@ export const UserMenu: React.FC = () => {
           <div className='flex items-center justify-between'>
             <div>
               <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                默認聚合搜尋結果
+                預設聚合搜尋結果
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                搜尋時默認按標題和年份聚合顯示結果
+                搜尋時預設按標題和年份聚合顯示結果
               </p>
             </div>
             <label className='flex items-center cursor-pointer'>
@@ -531,7 +531,7 @@ export const UserMenu: React.FC = () => {
                 啟用豆瓣代理
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
-                啟用后，豆瓣數據將通過代理伺服器獲取
+                啟用後，豆瓣資料將透過代理伺服器取得
               </p>
             </div>
             <label className='flex items-center cursor-pointer'>
@@ -552,7 +552,7 @@ export const UserMenu: React.FC = () => {
           <div className='space-y-3'>
             <div>
               <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                豆瓣代理地址
+                豆瓣代理網址
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
                 僅在啟用豆瓣代理時生效，留空則使用伺服器 API
@@ -604,7 +604,7 @@ export const UserMenu: React.FC = () => {
           <div className='space-y-3'>
             <div>
               <h4 className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-                圖片代理地址
+                圖片代理網址
               </h4>
               <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
                 留空使用內建代理，不需要另外尋找代理網址
@@ -618,7 +618,7 @@ export const UserMenu: React.FC = () => {
                   : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 text-gray-400 dark:text-gray-500 placeholder-gray-400 dark:placeholder-gray-600 cursor-not-allowed'
               }`}
               placeholder='例如: https://imageproxy.example.com/?url='
-              aria-label='圖片代理地址'
+              aria-label='圖片代理網址'
               value={imageProxyUrl}
               onChange={(e) => handleImageProxyUrlChange(e.target.value)}
               disabled={!enableImageProxy}
@@ -629,7 +629,7 @@ export const UserMenu: React.FC = () => {
         {/* 底部说明 */}
         <div className='mt-6 pt-4 border-t border-gray-200 dark:border-gray-700'>
           <p className='text-xs text-gray-500 dark:text-gray-400 text-center'>
-            設定自動保存在此瀏覽器，變更後請重新整理頁面
+            設定自動儲存在此瀏覽器，變更後請重新整理頁面
           </p>
         </div>
       </div>
@@ -722,7 +722,7 @@ export const UserMenu: React.FC = () => {
         {/* 底部说明 */}
         <div className='mt-4 pt-4 border-t border-gray-200 dark:border-gray-700'>
           <p className='text-xs text-gray-500 dark:text-gray-400 text-center'>
-            修改密碼后需要重新登錄
+            修改密碼後需要重新登入
           </p>
         </div>
       </div>

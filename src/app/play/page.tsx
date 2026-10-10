@@ -21,6 +21,7 @@ import {
   saveSkipConfig,
   subscribeToDataUpdates,
 } from '@/lib/db.client';
+import { playerI18n } from '@/lib/player-i18n';
 import { SearchResult } from '@/lib/types';
 import {
   getImageProxyFallbackUrl,
@@ -477,7 +478,7 @@ function PlayPageClient() {
         await deleteSkipConfig(currentSourceRef.current, currentIdRef.current);
         artPlayerRef.current.setting.update({
           name: '跳过片头片尾',
-          html: '跳过片头片尾',
+          html: '跳過片頭片尾',
           switch: skipConfigRef.current.enable,
           onSwitch: function (item: any) {
             const newConfig = {
@@ -490,11 +491,11 @@ function PlayPageClient() {
         });
         artPlayerRef.current.setting.update({
           name: '设置片头',
-          html: '设置片头',
+          html: '設定片頭',
           icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="12" r="2" fill="#ffffff"/><path d="M9 12L17 12" stroke="#ffffff" stroke-width="2"/><path d="M17 6L17 18" stroke="#ffffff" stroke-width="2"/></svg>',
           tooltip:
             skipConfigRef.current.intro_time === 0
-              ? '设置片头时间'
+              ? '設定片頭時間'
               : `${formatTime(skipConfigRef.current.intro_time)}`,
           onClick: function () {
             const currentTime = artPlayerRef.current?.currentTime || 0;
@@ -510,11 +511,11 @@ function PlayPageClient() {
         });
         artPlayerRef.current.setting.update({
           name: '设置片尾',
-          html: '设置片尾',
+          html: '設定片尾',
           icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 6L7 18" stroke="#ffffff" stroke-width="2"/><path d="M7 12L15 12" stroke="#ffffff" stroke-width="2"/><circle cx="19" cy="12" r="2" fill="#ffffff"/></svg>',
           tooltip:
             skipConfigRef.current.outro_time >= 0
-              ? '设置片尾时间'
+              ? '設定片尾時間'
               : `-${formatTime(-skipConfigRef.current.outro_time)}`,
           onClick: function () {
             const outroTime =
@@ -611,7 +612,7 @@ function PlayPageClient() {
           `/api/detail?source=${source}&id=${id}`
         );
         if (!detailResponse.ok) {
-          throw new Error('获取视频详情失败');
+          throw new Error('取得影片詳情失敗');
         }
         const detailData = (await detailResponse.json()) as SearchResult;
         setAvailableSources([detailData]);
@@ -630,7 +631,7 @@ function PlayPageClient() {
           `/api/search?q=${encodeURIComponent(query.trim())}`
         );
         if (!response.ok) {
-          throw new Error('搜索失败');
+          throw new Error('搜尋失敗');
         }
         const data = await response.json();
 
@@ -650,7 +651,7 @@ function PlayPageClient() {
         setAvailableSources(results);
         return results;
       } catch (err) {
-        setSourceSearchError(err instanceof Error ? err.message : '搜索失败');
+        setSourceSearchError(err instanceof Error ? err.message : '搜尋失敗');
         setAvailableSources([]);
         return [];
       } finally {
@@ -667,9 +668,7 @@ function PlayPageClient() {
       setLoading(true);
       setLoadingStage(currentSource && currentId ? 'fetching' : 'searching');
       setLoadingMessage(
-        currentSource && currentId
-          ? '正在取得影片資訊…'
-          : '正在尋找播放來源…'
+        currentSource && currentId ? '正在取得影片資訊…' : '正在尋找播放來源…'
       );
 
       let sourcesInfo = await fetchSourcesData(searchTitle || videoTitle);
@@ -882,7 +881,7 @@ function PlayPageClient() {
     } catch (err) {
       // 隐藏换源加载状态
       setIsVideoLoading(false);
-      setError(err instanceof Error ? err.message : '换源失败');
+      setError(err instanceof Error ? err.message : '換源失敗');
     }
   };
 
@@ -1180,7 +1179,7 @@ function PlayPageClient() {
       currentEpisodeIndex >= detail.episodes.length ||
       currentEpisodeIndex < 0
     ) {
-      setError(`选集索引无效，当前共 ${totalEpisodes} 集`);
+      setError(`選集索引無效，當前共 ${totalEpisodes} 集`);
       return;
     }
 
@@ -1251,7 +1250,8 @@ function PlayPageClient() {
         autoPlayback: false,
         airplay: true,
         theme: '#22c55e',
-        lang: 'zh-cn',
+        lang: 'zh-tw',
+        i18n: playerI18n,
         hotkey: false,
         fastForward: true,
         autoOrientation: true,
@@ -1319,9 +1319,9 @@ function PlayPageClient() {
         },
         settings: [
           {
-            html: '去广告',
+            html: '去廣告',
             icon: '<text x="50%" y="50%" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#ffffff">AD</text>',
-            tooltip: blockAdEnabled ? '已开启' : '已关闭',
+            tooltip: blockAdEnabled ? '已開啟' : '已關閉',
             onClick() {
               const newVal = !blockAdEnabled;
               try {
@@ -1341,12 +1341,12 @@ function PlayPageClient() {
               } catch (_) {
                 // ignore
               }
-              return newVal ? '当前开启' : '当前关闭';
+              return newVal ? '當前開啟' : '當前關閉';
             },
           },
           {
             name: '跳过片头片尾',
-            html: '跳过片头片尾',
+            html: '跳過片頭片尾',
             switch: skipConfigRef.current.enable,
             onSwitch: function (item) {
               const newConfig = {
@@ -1358,7 +1358,7 @@ function PlayPageClient() {
             },
           },
           {
-            html: '删除跳过配置',
+            html: '刪除跳過設定',
             onClick: function () {
               handleSkipConfigChange({
                 enable: false,
@@ -1370,11 +1370,11 @@ function PlayPageClient() {
           },
           {
             name: '设置片头',
-            html: '设置片头',
+            html: '設定片頭',
             icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="12" r="2" fill="#ffffff"/><path d="M9 12L17 12" stroke="#ffffff" stroke-width="2"/><path d="M17 6L17 18" stroke="#ffffff" stroke-width="2"/></svg>',
             tooltip:
               skipConfigRef.current.intro_time === 0
-                ? '设置片头时间'
+                ? '設定片頭時間'
                 : `${formatTime(skipConfigRef.current.intro_time)}`,
             onClick: function () {
               const currentTime = artPlayerRef.current?.currentTime || 0;
@@ -1390,11 +1390,11 @@ function PlayPageClient() {
           },
           {
             name: '设置片尾',
-            html: '设置片尾',
+            html: '設定片尾',
             icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 6L7 18" stroke="#ffffff" stroke-width="2"/><path d="M7 12L15 12" stroke="#ffffff" stroke-width="2"/><circle cx="19" cy="12" r="2" fill="#ffffff"/></svg>',
             tooltip:
               skipConfigRef.current.outro_time >= 0
-                ? '设置片尾时间'
+                ? '設定片尾時間'
                 : `-${formatTime(-skipConfigRef.current.outro_time)}`,
             onClick: function () {
               const outroTime =
@@ -1496,7 +1496,7 @@ function PlayPageClient() {
           currentTime < skipConfigRef.current.intro_time
         ) {
           artPlayerRef.current.currentTime = skipConfigRef.current.intro_time;
-          artPlayerRef.current.notice.show = `已跳过片头 (${formatTime(
+          artPlayerRef.current.notice.show = `已跳過片頭 (${formatTime(
             skipConfigRef.current.intro_time
           )})`;
         }
@@ -1516,7 +1516,7 @@ function PlayPageClient() {
           } else {
             artPlayerRef.current.pause();
           }
-          artPlayerRef.current.notice.show = `已跳过片尾 (${formatTime(
+          artPlayerRef.current.notice.show = `已跳過片尾 (${formatTime(
             skipConfigRef.current.outro_time
           )})`;
         }
@@ -1627,7 +1627,7 @@ function PlayPageClient() {
                 </p>
               </div>
               <p className='text-sm text-gray-500 dark:text-gray-400'>
-                請檢查網路連接或嘗試刷新頁面
+                請檢查網路連線或嘗試重新整理頁面
               </p>
             </div>
 
@@ -1919,7 +1919,7 @@ const FavoriteIcon = ({ filled }: { filled: boolean }) => {
 
 export default function PlayPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>載入中…</div>}>
       <PlayPageClient />
     </Suspense>
   );

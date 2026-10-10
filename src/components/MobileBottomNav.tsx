@@ -30,7 +30,7 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
     },
     {
       icon: Tv,
-      label: '劇集',
+      label: '影集',
       href: '/douban?type=tv',
     },
     {
@@ -47,7 +47,7 @@ const MobileBottomNav = ({ activePath }: MobileBottomNavProps) => {
         ...prevItems,
         {
           icon: Star,
-          label: '自定義',
+          label: '自訂',
           href: '/douban?type=custom',
         },
       ]);

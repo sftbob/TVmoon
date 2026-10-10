@@ -78,19 +78,19 @@ export async function fetchDoubanCategories(
 
   // 验证参数
   if (!['tv', 'movie'].includes(kind)) {
-    throw new Error('kind 参数必须是 tv 或 movie');
+    throw new Error('kind 參數必須是 tv 或 movie');
   }
 
   if (!category || !type) {
-    throw new Error('category 和 type 参数不能为空');
+    throw new Error('category 和 type 參數不能為空');
   }
 
   if (pageLimit < 1 || pageLimit > 100) {
-    throw new Error('pageLimit 必须在 1-100 之间');
+    throw new Error('pageLimit 必須在 1-100 之間');
   }
 
   if (pageStart < 0) {
-    throw new Error('pageStart 不能小于 0');
+    throw new Error('pageStart 不能小於 0');
   }
 
   const target = `https://m.douban.com/rexxar/api/v2/subject/recent_hot/${kind}?start=${pageStart}&limit=${pageLimit}&category=${category}&type=${type}`;
@@ -99,7 +99,7 @@ export async function fetchDoubanCategories(
     const response = await fetchWithTimeout(target);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`連線失敗，HTTP 狀態碼：${response.status}`);
     }
 
     const doubanData: DoubanCategoryApiResponse = await response.json();
@@ -115,7 +115,7 @@ export async function fetchDoubanCategories(
 
     return {
       code: 200,
-      message: '获取成功',
+      message: '取得成功',
       list: list,
     };
   } catch (error) {
@@ -123,11 +123,11 @@ export async function fetchDoubanCategories(
     if (typeof window !== 'undefined') {
       window.dispatchEvent(
         new CustomEvent('globalError', {
-          detail: { message: '获取豆瓣分类数据失败' },
+          detail: { message: '取得豆瓣分類資料失敗' },
         })
       );
     }
-    throw new Error(`获取豆瓣分类数据失败: ${(error as Error).message}`);
+    throw new Error(`取得豆瓣分類資料失敗: ${(error as Error).message}`);
   }
 }
 
@@ -152,11 +152,11 @@ export async function getDoubanCategories(
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
           new CustomEvent('globalError', {
-            detail: { message: '获取豆瓣分类数据失败' },
+            detail: { message: '取得豆瓣分類資料失敗' },
           })
         );
       }
-      throw new Error('获取豆瓣分类数据失败');
+      throw new Error('取得豆瓣分類資料失敗');
     }
 
     return response.json();
@@ -187,11 +187,11 @@ export async function getDoubanList(
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
           new CustomEvent('globalError', {
-            detail: { message: '获取豆瓣列表数据失败' },
+            detail: { message: '取得豆瓣列表資料失敗' },
           })
         );
       }
-      throw new Error('获取豆瓣列表数据失败');
+      throw new Error('取得豆瓣列表資料失敗');
     }
 
     return response.json();
@@ -205,19 +205,19 @@ export async function fetchDoubanList(
 
   // 验证参数
   if (!tag || !type) {
-    throw new Error('tag 和 type 参数不能为空');
+    throw new Error('tag 和 type 參數不能為空');
   }
 
   if (!['tv', 'movie'].includes(type)) {
-    throw new Error('type 参数必须是 tv 或 movie');
+    throw new Error('type 參數必須是 tv 或 movie');
   }
 
   if (pageLimit < 1 || pageLimit > 100) {
-    throw new Error('pageLimit 必须在 1-100 之间');
+    throw new Error('pageLimit 必須在 1-100 之間');
   }
 
   if (pageStart < 0) {
-    throw new Error('pageStart 不能小于 0');
+    throw new Error('pageStart 不能小於 0');
   }
 
   const target = `https://movie.douban.com/j/search_subjects?type=${type}&tag=${tag}&sort=recommend&page_limit=${pageLimit}&page_start=${pageStart}`;
@@ -226,7 +226,7 @@ export async function fetchDoubanList(
     const response = await fetchWithTimeout(target);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`連線失敗，HTTP 狀態碼：${response.status}`);
     }
 
     const doubanData: DoubanCategoryApiResponse = await response.json();
@@ -242,7 +242,7 @@ export async function fetchDoubanList(
 
     return {
       code: 200,
-      message: '获取成功',
+      message: '取得成功',
       list: list,
     };
   } catch (error) {
@@ -250,10 +250,10 @@ export async function fetchDoubanList(
     if (typeof window !== 'undefined') {
       window.dispatchEvent(
         new CustomEvent('globalError', {
-          detail: { message: '获取豆瓣列表数据失败' },
+          detail: { message: '取得豆瓣列表資料失敗' },
         })
       );
     }
-    throw new Error(`获取豆瓣分类数据失败: ${(error as Error).message}`);
+    throw new Error(`取得豆瓣分類資料失敗: ${(error as Error).message}`);
   }
 }

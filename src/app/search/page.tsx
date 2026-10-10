@@ -176,13 +176,13 @@ function SearchPageClient() {
         throw new Error(
           response.status === 401
             ? '登入已失效，請重新登入後再搜尋。'
-            : '搜尋服務暫時無法使用，請稍後重試。'
+            : '搜尋服務暫時無法使用，請稍後再試一次。'
         );
       }
       const data = await response.json();
       if (controller.signal.aborted) return;
       if (!Array.isArray(data.results))
-        throw new Error('搜尋回應格式有誤，請重試。');
+        throw new Error('搜尋回應格式有誤，請再試一次。');
       let results = data.results;
       if (
         typeof window !== 'undefined' &&
@@ -227,7 +227,7 @@ function SearchPageClient() {
       setSearchError(
         error instanceof Error && !(error instanceof TypeError)
           ? error.message
-          : '網路連線失敗，請重試。'
+          : '網路連線失敗，請再試一次。'
       );
     } finally {
       if (!controller.signal.aborted) setIsLoading(false);

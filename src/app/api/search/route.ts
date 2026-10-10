@@ -50,6 +50,6 @@ export async function GET(request: Request) {
       }
     );
   } catch (error) {
-    return NextResponse.json({ error: '搜索失败' }, { status: 500 });
+    return NextResponse.json({ error: '搜尋失敗' }, { status: 500 });
   }
 }

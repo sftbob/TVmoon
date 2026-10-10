@@ -19,12 +19,12 @@ const STORAGE_TYPE =
 export async function POST(req: NextRequest) {
   try {
     if (!process.env.PASSWORD) {
-      return NextResponse.json({ error: '尚未設定站台密碼' }, { status: 503 });
+      return NextResponse.json({ error: '尚未設定站臺密碼' }, { status: 503 });
     }
     // localstorage 模式下不支持注册
     if (STORAGE_TYPE === 'localstorage') {
       return NextResponse.json(
-        { error: '当前模式不支持注册' },
+        { error: '當前模式不支援註冊' },
         { status: 400 }
       );
     }
@@ -32,28 +32,31 @@ export async function POST(req: NextRequest) {
     const config = await getConfig();
     // 校验是否开放注册
     if (!config.UserConfig.AllowRegister) {
-      return NextResponse.json({ error: '当前未开放注册' }, { status: 400 });
+      return NextResponse.json({ error: '當前未開放註冊' }, { status: 400 });
     }
 
     const { username, password } = await req.json();
 
     if (!username || typeof username !== 'string') {
-      return NextResponse.json({ error: '用户名不能为空' }, { status: 400 });
+      return NextResponse.json(
+        { error: '使用者名稱稱不能為空' },
+        { status: 400 }
+      );
     }
     if (!password || typeof password !== 'string') {
-      return NextResponse.json({ error: '密码不能为空' }, { status: 400 });
+      return NextResponse.json({ error: '密碼不能為空' }, { status: 400 });
     }
 
     // 检查是否和管理员重复
     if (username === process.env.USERNAME) {
-      return NextResponse.json({ error: '用户已存在' }, { status: 400 });
+      return NextResponse.json({ error: '使用者已存在' }, { status: 400 });
     }
 
     try {
       // 检查用户是否已存在
       const exist = await db.checkUserExist(username);
       if (exist) {
-        return NextResponse.json({ error: '用户已存在' }, { status: 400 });
+        return NextResponse.json({ error: '使用者已存在' }, { status: 400 });
       }
 
       await db.registerUser(username, password);
@@ -72,10 +75,10 @@ export async function POST(req: NextRequest) {
       return response;
     } catch (err) {
       console.error('数据库注册失败', err);
-      return NextResponse.json({ error: '数据库错误' }, { status: 500 });
+      return NextResponse.json({ error: '資料庫錯誤' }, { status: 500 });
     }
   } catch (error) {
     console.error('注册接口异常', error);
-    return NextResponse.json({ error: '服务器错误' }, { status: 500 });
+    return NextResponse.json({ error: '伺服器錯誤' }, { status: 500 });
   }
 }

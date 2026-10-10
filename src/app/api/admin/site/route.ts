@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   if (storageType === 'localstorage') {
     return NextResponse.json(
       {
-        error: '不支持本地存储进行管理员配置',
+        error: '不支援本地儲存進行管理員設定',
       },
       { status: 400 }
     );
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       typeof DoubanProxy !== 'string' ||
       typeof DisableYellowFilter !== 'boolean'
     ) {
-      return NextResponse.json({ error: '参数格式错误' }, { status: 400 });
+      return NextResponse.json({ error: '參數格式錯誤' }, { status: 400 });
     }
 
     const adminConfig = await getConfig();
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         (u) => u.username === username
       );
       if (!user || user.role !== 'admin' || user.banned) {
-        return NextResponse.json({ error: '权限不足' }, { status: 401 });
+        return NextResponse.json({ error: '權限不足' }, { status: 401 });
       }
     }
 
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
     console.error('更新站点配置失败:', error);
     return NextResponse.json(
       {
-        error: '更新站点配置失败',
+        error: '更新網站設定失敗',
         details: (error as Error).message,
       },
       { status: 500 }

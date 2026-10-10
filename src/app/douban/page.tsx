@@ -169,7 +169,7 @@ function DoubanPageClient() {
             pageStart: 0,
           });
         } else {
-          throw new Error('没有找到对应的分类');
+          throw new Error('沒有找到對應的分類');
         }
       } else {
         data = await getDoubanCategories(getRequestParams(0));
@@ -180,7 +180,7 @@ function DoubanPageClient() {
         setHasMore(data.list.length === 25);
         setLoading(false);
       } else {
-        throw new Error(data.message || '获取数据失败');
+        throw new Error(data.message || '取得資料失敗');
       }
     } catch (err) {
       console.error(err);
@@ -254,7 +254,7 @@ function DoubanPageClient() {
                 pageStart: currentPage * 25,
               });
             } else {
-              throw new Error('没有找到对应的分类');
+              throw new Error('沒有找到對應的分類');
             }
           } else {
             data = await getDoubanCategories(
@@ -266,7 +266,7 @@ function DoubanPageClient() {
             setDoubanData((prev) => [...prev, ...data.list]);
             setHasMore(data.list.length === 25);
           } else {
-            throw new Error(data.message || '获取数据失败');
+            throw new Error(data.message || '取得資料失敗');
           }
         } catch (err) {
           console.error(err);
@@ -357,12 +357,12 @@ function DoubanPageClient() {
   const getPageTitle = () => {
     // 根据 type 生成标题
     return type === 'movie'
-      ? '电影'
+      ? '電影'
       : type === 'tv'
-      ? '电视剧'
+      ? '影集'
       : type === 'show'
-      ? '综艺'
-      : '自定义';
+      ? '綜藝'
+      : '自訂';
   };
 
   const getActivePath = () => {
@@ -451,7 +451,7 @@ function DoubanPageClient() {
               {isLoadingMore && (
                 <div className='flex items-center gap-2'>
                   <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-green-500'></div>
-                  <span className='text-gray-600'>加載中...</span>
+                  <span className='text-gray-600'>載入中...</span>
                 </div>
               )}
             </div>
@@ -459,7 +459,7 @@ function DoubanPageClient() {
 
           {/* 没有更多数据提示 */}
           {!hasMore && doubanData.length > 0 && (
-            <div className='text-center text-gray-500 py-8'>已加載全部內容</div>
+            <div className='text-center text-gray-500 py-8'>已載入全部內容</div>
           )}
 
           {/* 空状态 */}
