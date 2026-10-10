@@ -285,7 +285,7 @@ const Sidebar = ({ onToggle, activePath = '/' }: SidebarProps) => {
         </aside>
         <div
           className={`transition-all duration-300 sidebar-offset ${
-            isCollapsed ? 'w-16' : 'w-64'
+            isCollapsed ? 'w-16' : 'w-56'
           }`}
         ></div>
       </div>

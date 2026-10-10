@@ -119,7 +119,7 @@ export default function ContinueWatching({ className }: ContinueWatchingProps) {
               </div>
             ))
           : // 显示真实数据
-            playRecords.map((record, index) => {
+            playRecords.map((record) => {
               const { source, id } = parseKey(record.key);
               return (
                 <div

@@ -65,7 +65,7 @@ export default function CinemaHero({ movies }: { movies: DoubanItem[] }) {
             瀏覽電影片單 <span aria-hidden='true'>↗</span>
           </Link>
         </div>
-        <p className='tv-hero-footnote'>電影 · 影集 · 綜藝　／　你的觀影日常</p>
+        <p className='tv-hero-footnote'>電影 · 影集 · 綜藝 / 你的觀影日常</p>
       </div>
       <div className='tv-hero-gallery'>
         <div className='tv-hero-orbit' aria-hidden='true' />
