@@ -713,7 +713,6 @@ function PlayPageClient() {
         detailData = await preferBestSource(sourcesInfo);
       }
 
-
       setNeedPrefer(false);
       setCurrentSource(detailData.source);
       setCurrentId(detailData.id);
@@ -1813,7 +1812,7 @@ function PlayPageClient() {
               <div className='relative w-full h-[300px] lg:h-full'>
                 <div
                   ref={artRef}
-                  className='bg-black w-full h-full rounded-xl overflow-hidden shadow-lg'
+                  className='tv-player bg-black w-full h-full rounded-xl overflow-hidden shadow-lg'
                 ></div>
 
                 {/* 换源加载蒙层 */}
@@ -1943,8 +1942,10 @@ function PlayPageClient() {
                       loading='lazy'
                       referrerPolicy='no-referrer'
                       onLoad={(e) => {
-                        if (e.currentTarget.dataset.proxyAttempt ||
-                            getInitialPosterUrl(videoCover) !== videoCover) {
+                        if (
+                          e.currentTarget.dataset.proxyAttempt ||
+                          getInitialPosterUrl(videoCover) !== videoCover
+                        ) {
                           rememberPosterProxyHost(videoCover);
                         }
                       }}
