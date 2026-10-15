@@ -1,8 +1,7 @@
-import { Search } from 'lucide-react';
-
 import { BackButton } from './BackButton';
 import MobileBottomNav from './MobileBottomNav';
 import MobileHeader from './MobileHeader';
+import QuickSearch from './QuickSearch';
 import Sidebar from './Sidebar';
 import { ThemeToggle } from './ThemeToggle';
 import { UserMenu } from './UserMenu';
@@ -34,15 +33,7 @@ const PageLayout = ({ children, activePath = '/' }: PageLayoutProps) => {
               <span className='tv-topbar-label'>{label}</span>
             </div>
             <div className='flex items-center gap-3'>
-              <form action='/search' className='tv-quick-search'>
-                <Search size={15} aria-hidden='true' />
-                <input
-                  name='q'
-                  aria-label='快速搜尋電影或影集'
-                  placeholder='尋找一部好作品…'
-                />
-                <kbd aria-hidden='true'>↵</kbd>
-              </form>
+              <QuickSearch />
               <ThemeToggle />
               <UserMenu />
             </div>

@@ -2,7 +2,9 @@
 
 'use client';
 
-const CURRENT_VERSION = '20261015195720';
+import { createRequestCache } from './request-cache';
+
+const CURRENT_VERSION = '20261015204229';
 
 // 版本检查结果枚举
 export enum UpdateStatus {
@@ -21,7 +23,17 @@ const VERSION_CHECK_URLS = [
  * 检查是否有新版本可用
  * @returns Promise<UpdateStatus> - 返回版本检查状态
  */
-export async function checkForUpdates(): Promise<UpdateStatus> {
+const cachedVersionCheck = createRequestCache<UpdateStatus>(
+  10 * 60 * 1000,
+  1,
+  (status) => status !== UpdateStatus.FETCH_FAILED
+);
+
+export function checkForUpdates(): Promise<UpdateStatus> {
+  return cachedVersionCheck('version', fetchUpdateStatus);
+}
+
+async function fetchUpdateStatus(): Promise<UpdateStatus> {
   try {
     // 尝试从主要URL获取版本信息
     const primaryVersion = await fetchVersionFromUrl(VERSION_CHECK_URLS[0]);
@@ -49,10 +61,9 @@ export async function checkForUpdates(): Promise<UpdateStatus> {
  * @returns Promise<string | null> - 版本字符串或null
  */
 async function fetchVersionFromUrl(url: string): Promise<string | null> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5秒超时
-
     const response = await fetch(url, {
       method: 'GET',
       signal: controller.signal,
@@ -61,17 +72,17 @@ async function fetchVersionFromUrl(url: string): Promise<string | null> {
       },
     });
 
-    clearTimeout(timeoutId);
-
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const version = await response.text();
-    return version.trim();
+    return /^\d{14}$/.test(version.trim()) ? version.trim() : null;
   } catch (error) {
     console.warn(`从 ${url} 获取版本信息失败:`, error);
     return null;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
