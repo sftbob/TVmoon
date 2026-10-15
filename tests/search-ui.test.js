@@ -26,7 +26,11 @@ jest.mock('@/components/PageLayout', () => ({
 }));
 jest.mock('@/components/VideoCard', () => ({
   __esModule: true,
-  default: ({ title, items }) => <div>{title || items?.[0]?.title}</div>,
+  default: ({ title, items }) => (
+    <div data-testid='video-card' data-source-count={items?.length || 1}>
+      {title || items?.[0]?.title}
+    </div>
+  ),
 }));
 const SearchPage = require('@/app/search/page').default;
 const result = (title) => ({
@@ -103,4 +107,28 @@ test('empty results are distinct from a request failure', async () => {
   render(<SearchPage />);
   await screen.findByText(/沒有找到|未找到|無.*結果/);
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+});
+
+test('Traditional and Simplified titles aggregate together without changing the input', async () => {
+  mockParams = new URLSearchParams('q=龍貓');
+  global.fetch.mockResolvedValue(
+    response([
+      { ...result('龙猫'), source: 'one' },
+      { ...result('龍貓'), source: 'two' },
+      result('龙猫2'),
+    ])
+  );
+  render(<SearchPage />);
+  await waitFor(() =>
+    expect(screen.getAllByTestId('video-card')).toHaveLength(2)
+  );
+  expect(
+    screen
+      .getAllByTestId('video-card')
+      .filter((card) => card.getAttribute('data-source-count') === '2')
+  ).toHaveLength(1);
+  expect(screen.getByRole('textbox', { name: '搜尋電影或影集' })).toHaveValue(
+    '龍貓'
+  );
+  expect(screen.getByText('龙猫2')).toBeInTheDocument();
 });

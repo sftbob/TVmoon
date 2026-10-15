@@ -1,4 +1,13 @@
-# MoonTV
+# 添丁電影院（TVmoon）
+
+此儲存庫是 [sftbob/TVmoon](https://github.com/sftbob/TVmoon) 的個人版本，保留 MoonTV 的來源說明與授權。個人版本採莫蘭迪配色、繁體中文與台灣用語，並提供 PWA 安裝及繁簡片名搜尋。
+
+- [更新紀錄](CHANGELOG.md)
+- [繁簡搜尋使用與維護](docs/chinese-search.md)
+- [個人版本、上游同步與版本維護](docs/personal-development.md)
+- [PWA 說明](docs/pwa.md)
+
+以下保留原專案的部署與技術文件；個人版本的變更與限制請先參考上述文件。
 
 <div align="center">
   <img src="public/logo.png" alt="LibreTV Logo" width="120">

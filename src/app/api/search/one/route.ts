@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { getCacheTime, getConfig } from '@/lib/config';
 import { searchFromApi } from '@/lib/downstream';
+import { normalizeSearchTitle } from '@/lib/search-text';
 import { yellowWords } from '@/lib/yellow';
 
 export const runtime = 'edge';
@@ -43,7 +44,10 @@ export async function GET(request: Request) {
     }
 
     const results = await searchFromApi(targetSite, query);
-    let result = results.filter((r) => r.title === query);
+    const normalizedQuery = normalizeSearchTitle(query);
+    let result = results.filter(
+      (r) => normalizeSearchTitle(r.title) === normalizedQuery
+    );
     if (!config.SiteConfig.DisableYellowFilter) {
       result = result.filter((result) => {
         const typeName = result.type_name || '';

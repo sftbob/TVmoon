@@ -22,6 +22,7 @@ import {
   subscribeToDataUpdates,
 } from '@/lib/db.client';
 import { playerI18n } from '@/lib/player-i18n';
+import { normalizeSearchTitle } from '@/lib/search-text';
 import { SearchResult } from '@/lib/types';
 import {
   getImageProxyFallbackUrl,
@@ -638,8 +639,8 @@ function PlayPageClient() {
         // 处理搜索结果，根据规则过滤
         const results = data.results.filter(
           (result: SearchResult) =>
-            result.title.replaceAll(' ', '').toLowerCase() ===
-              videoTitleRef.current.replaceAll(' ', '').toLowerCase() &&
+            normalizeSearchTitle(result.title) ===
+              normalizeSearchTitle(videoTitleRef.current) &&
             (videoYearRef.current
               ? result.year.toLowerCase() === videoYearRef.current.toLowerCase()
               : true) &&

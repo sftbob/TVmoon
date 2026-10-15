@@ -1,4 +1,5 @@
 import { API_CONFIG, ApiSite, getConfig } from '@/lib/config';
+import { getSearchQueries } from '@/lib/search-text';
 import { SearchResult } from '@/lib/types';
 import { cleanHtmlTags } from '@/lib/utils';
 
@@ -16,6 +17,22 @@ interface ApiSearchItem {
 }
 
 export async function searchFromApi(
+  apiSite: ApiSite,
+  query: string
+): Promise<SearchResult[]> {
+  const batches = await Promise.all(
+    getSearchQueries(query).map((variant) => searchOneQuery(apiSite, variant))
+  );
+  const seen = new Set<string>();
+  return batches.flat().filter((result) => {
+    const key = JSON.stringify([result.source, result.id]);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+async function searchOneQuery(
   apiSite: ApiSite,
   query: string
 ): Promise<SearchResult[]> {
@@ -299,7 +316,8 @@ async function handleSpecialSourceDetail(
   }
 
   if (matches.length === 0) {
-    const generalPattern = /\$(https?:\/\/[^"'\s<>#$]+?\.m3u8(?:\?[^"'\s<>#$]*)?)/g;
+    const generalPattern =
+      /\$(https?:\/\/[^"'\s<>#$]+?\.m3u8(?:\?[^"'\s<>#$]*)?)/g;
     matches = html.match(generalPattern) || [];
   }
 
