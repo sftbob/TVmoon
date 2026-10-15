@@ -26,7 +26,11 @@ jest.mock('@/components/PageLayout', () => ({
 }));
 jest.mock('@/components/VideoCard', () => ({
   __esModule: true,
-  default: ({ title, items }) => <div>{title || items?.[0]?.title}</div>,
+  default: ({ title, items }) => (
+    <div data-testid='video-card' data-source-count={items?.length || 1}>
+      {title || items?.[0]?.title}
+    </div>
+  ),
 }));
 const SearchPage = require('@/app/search/page').default;
 const result = (title) => ({
@@ -115,8 +119,14 @@ test('Traditional and Simplified titles aggregate together without changing the 
     ])
   );
   render(<SearchPage />);
-  await screen.findByText('龙猫');
-  expect(screen.queryByText('龍貓')).not.toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.getAllByTestId('video-card')).toHaveLength(2)
+  );
+  expect(
+    screen
+      .getAllByTestId('video-card')
+      .filter((card) => card.getAttribute('data-source-count') === '2')
+  ).toHaveLength(1);
   expect(screen.getByRole('textbox', { name: '搜尋電影或影集' })).toHaveValue(
     '龍貓'
   );
