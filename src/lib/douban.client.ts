@@ -1,5 +1,12 @@
+import { createRequestCache } from './request-cache';
 import { DoubanItem, DoubanResult } from './types';
 import { getDoubanProxyUrl } from './utils';
+
+const cachedListing = createRequestCache<DoubanResult>(
+  60 * 1000,
+  24,
+  (result) => result.code === 200
+);
 
 interface DoubanCategoriesParams {
   kind: 'tv' | 'movie';
@@ -137,6 +144,27 @@ export async function fetchDoubanCategories(
 export async function getDoubanCategories(
   params: DoubanCategoriesParams
 ): Promise<DoubanResult> {
+  const { kind, category, type, pageLimit = 20, pageStart = 0 } = params;
+  const proxy = getDoubanProxyUrl();
+  const load = () => loadDoubanCategories(params);
+  if (typeof window === 'undefined') return load();
+  return cachedListing(
+    JSON.stringify([
+      'categories',
+      proxy,
+      kind,
+      category,
+      type,
+      pageLimit,
+      pageStart,
+    ]),
+    load
+  );
+}
+
+async function loadDoubanCategories(
+  params: DoubanCategoriesParams
+): Promise<DoubanResult> {
   if (shouldUseDoubanClient()) {
     // 使用客户端代理获取（当设置了代理 URL 时）
     return fetchDoubanCategories(params);
@@ -173,6 +201,17 @@ interface DoubanListParams {
 export async function getDoubanList(
   params: DoubanListParams
 ): Promise<DoubanResult> {
+  const { tag, type, pageLimit = 20, pageStart = 0 } = params;
+  const proxy = getDoubanProxyUrl();
+  const load = () => loadDoubanList(params);
+  if (typeof window === 'undefined') return load();
+  return cachedListing(
+    JSON.stringify(['list', proxy, tag, type, pageLimit, pageStart]),
+    load
+  );
+}
+
+async function loadDoubanList(params: DoubanListParams): Promise<DoubanResult> {
   const { tag, type, pageLimit = 20, pageStart = 0 } = params;
   if (shouldUseDoubanClient()) {
     // 使用客户端代理获取（当设置了代理 URL 时）

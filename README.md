@@ -4,6 +4,7 @@
 
 - [更新紀錄](CHANGELOG.md)
 - [繁簡搜尋使用與維護](docs/chinese-search.md)
+- [換頁效能與快取維護](docs/navigation-performance.md)
 - [個人版本、上游同步與版本維護](docs/personal-development.md)
 - [PWA 說明](docs/pwa.md)
 

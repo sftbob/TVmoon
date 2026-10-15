@@ -34,7 +34,7 @@ Docker 僅 main 可發佈，PR 只建置、不登入、不發佈。
 
 ## 版本與文件維護
 
-- `package.json` 使用語意版本：新功能提升次版本，錯誤修正提升修訂版本；此次繁簡搜尋為 `0.2.0`。
+- `package.json` 使用語意版本：新功能提升次版本，錯誤修正提升修訂版本；繁簡搜尋為 `0.2.0`，換頁效能修正為 `0.2.1`。
 - 網站顯示版本沿用 `YYYYMMDDHHmmss`。發佈候選提交前，在 Asia/Taipei 時區執行 `pnpm gen:version`，一併提交 `src/lib/version.ts` 與 `VERSION.txt`；兩者必須一致。CI 不另產生不同版本號。
 - 網站版本檢查只查詢 `sftbob/TVmoon` 的 `main`，與上游更新檢查分開。預覽分支版本可能比正式版新，並不代表已正式發佈。
 - 每次功能或行為變更都更新 `CHANGELOG.md`，並同步相關 `docs/` 說明與 README 連結。尚未合併的功能須標示「待驗收」。
