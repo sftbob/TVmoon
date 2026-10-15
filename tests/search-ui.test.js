@@ -104,3 +104,21 @@ test('empty results are distinct from a request failure', async () => {
   await screen.findByText(/沒有找到|未找到|無.*結果/);
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 });
+
+test('Traditional and Simplified titles aggregate together without changing the input', async () => {
+  mockParams = new URLSearchParams('q=龍貓');
+  global.fetch.mockResolvedValue(
+    response([
+      { ...result('龙猫'), source: 'one' },
+      { ...result('龍貓'), source: 'two' },
+      result('龙猫2'),
+    ])
+  );
+  render(<SearchPage />);
+  await screen.findByText('龙猫');
+  expect(screen.queryByText('龍貓')).not.toBeInTheDocument();
+  expect(screen.getByRole('textbox', { name: '搜尋電影或影集' })).toHaveValue(
+    '龍貓'
+  );
+  expect(screen.getByText('龙猫2')).toBeInTheDocument();
+});

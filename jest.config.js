@@ -20,6 +20,8 @@ const customJestConfig = {
    * Absolute imports and Module Path Aliases
    */
   moduleNameMapper: {
+    // Jest 27 does not resolve this package's conditional subpath exports.
+    '^opencc-js/t2cn$': '<rootDir>/node_modules/opencc-js/dist/umd/t2cn.js',
     '^@/(.*)$': '<rootDir>/src/$1',
     '^~/(.*)$': '<rootDir>/public/$1',
     '^.+\\.(svg)$': '<rootDir>/src/__mocks__/svg.tsx',

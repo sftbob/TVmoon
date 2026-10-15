@@ -12,6 +12,7 @@ import {
   getSearchHistory,
   subscribeToDataUpdates,
 } from '@/lib/db.client';
+import { normalizeSearchTitle } from '@/lib/search-text';
 import { SearchResult } from '@/lib/types';
 import { yellowWords } from '@/lib/yellow';
 
@@ -59,7 +60,7 @@ function SearchPageClient() {
     const map = new Map<string, SearchResult[]>();
     searchResults.forEach((item) => {
       // 使用 title + year + type 作为键，year 必然存在，但依然兜底 'unknown'
-      const key = `${item.title.replaceAll(' ', '')}-${
+      const key = `${normalizeSearchTitle(item.title)}-${
         item.year || 'unknown'
       }-${item.episodes.length === 1 ? 'movie' : 'tv'}`;
       const arr = map.get(key) || [];
@@ -68,12 +69,13 @@ function SearchPageClient() {
     });
     return Array.from(map.entries()).sort((a, b) => {
       // 优先排序：标题与搜索词完全一致的排在前面
-      const aExactMatch = a[1][0].title
-        .replaceAll(' ', '')
-        .includes(searchQuery.trim().replaceAll(' ', ''));
-      const bExactMatch = b[1][0].title
-        .replaceAll(' ', '')
-        .includes(searchQuery.trim().replaceAll(' ', ''));
+      const normalizedQuery = normalizeSearchTitle(searchQuery);
+      const aExactMatch = normalizeSearchTitle(a[1][0].title).includes(
+        normalizedQuery
+      );
+      const bExactMatch = normalizeSearchTitle(b[1][0].title).includes(
+        normalizedQuery
+      );
 
       if (aExactMatch && !bExactMatch) return -1;
       if (!aExactMatch && bExactMatch) return 1;
@@ -196,8 +198,9 @@ function SearchPageClient() {
       setSearchResults(
         results.sort((a: SearchResult, b: SearchResult) => {
           // 优先排序：标题与搜索词完全一致的排在前面
-          const aExactMatch = a.title === query.trim();
-          const bExactMatch = b.title === query.trim();
+          const normalizedQuery = normalizeSearchTitle(query);
+          const aExactMatch = normalizeSearchTitle(a.title) === normalizedQuery;
+          const bExactMatch = normalizeSearchTitle(b.title) === normalizedQuery;
 
           if (aExactMatch && !bExactMatch) return -1;
           if (!aExactMatch && bExactMatch) return 1;
