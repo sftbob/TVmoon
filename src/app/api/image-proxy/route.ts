@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
+const PRIVATE_HOST = /^(localhost|127(?:\.\d{1,3}){3}|0\.0\.0\.0|::1|\[::1\])$/i;
+
 // OrionTV 兼容接口
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -16,6 +18,10 @@ export async function GET(request: Request) {
     if (!['http:', 'https:'].includes(url.protocol)) {
       return NextResponse.json({ error: 'Invalid image URL' }, { status: 400 });
     }
+    // 此路由是公開的圖片資源，拒絕明顯的本機目標，避免被當成 SSRF 入口。
+    if (PRIVATE_HOST.test(url.hostname)) {
+      return NextResponse.json({ error: 'Invalid image host' }, { status: 400 });
+    }
   } catch {
     return NextResponse.json({ error: 'Invalid image URL' }, { status: 400 });
   }
@@ -23,10 +29,12 @@ export async function GET(request: Request) {
   try {
     const imageResponse = await fetch(imageUrl, {
       headers: {
+        Accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
         Referer: 'https://movie.douban.com/',
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
       },
+      signal: AbortSignal.timeout(10000),
     });
 
     if (!imageResponse.ok) {
