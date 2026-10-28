@@ -10,6 +10,9 @@ const publicPaths = new Set([
   '/api/logout',
   '/api/cron',
   '/api/server-config',
+  // 海報是頁面上的唯讀資源；瀏覽器載入圖片時不應因登入頁／工作階段
+  // 更新而被導向登入頁。代理端仍會驗證目標網址與回應類型。
+  '/api/image-proxy',
 ]);
 
 export async function middleware(request: NextRequest) {

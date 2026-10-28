@@ -4,7 +4,7 @@
 
 import { createRequestCache } from './request-cache';
 
-const CURRENT_VERSION = '20261015204229';
+const CURRENT_VERSION = '20261028202621';
 
 // 版本检查结果枚举
 export enum UpdateStatus {
